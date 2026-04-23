@@ -9,11 +9,14 @@ jest.mock('../../lib/api', () => ({
     get: jest.fn(),
   },
 }));
+
 jest.mock('../../lib/token', () => ({
+  __esModule: true,
   getToken: jest.fn(),
   setToken: jest.fn(),
   clearToken: jest.fn(),
 }));
+
 jest.mock('expo-router', () => ({ router: { replace: jest.fn() } }));
 
 const mockApi = require('../../lib/api').default;
@@ -38,18 +41,13 @@ describe('isStaff', () => {
 });
 
 describe('useLogin', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockToken.setToken.mockResolvedValue(undefined);
-    mockToken.getToken.mockResolvedValue(null);
-    mockToken.clearToken.mockResolvedValue(undefined);
-    mockApi.get.mockResolvedValue({ data: { data: null } });
-  });
+  beforeEach(() => jest.clearAllMocks());
 
   it('stores token on success', async () => {
-    mockApi.post.mockResolvedValue({
+    mockApi.post.mockResolvedValueOnce({
       data: { data: { token: 'test-token-123', user: { id: 1 } } },
     });
+    mockToken.setToken.mockResolvedValueOnce(undefined);
 
     const { result } = renderHook(() => useLogin(), { wrapper: TestWrapper });
 
@@ -57,7 +55,7 @@ describe('useLogin', () => {
       await result.current.mutateAsync({ email: 'test@example.com', password: 'password' });
     });
 
-    expect(result.current.isSuccess).toBe(true);
     expect(mockToken.setToken).toHaveBeenCalledWith('test-token-123');
+    expect(result.current.isSuccess).toBe(true);
   });
 });
