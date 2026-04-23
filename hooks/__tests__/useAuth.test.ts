@@ -55,7 +55,10 @@ describe('useLogin', () => {
       await result.current.mutateAsync({ email: 'test@example.com', password: 'password' });
     });
 
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
     expect(mockToken.setToken).toHaveBeenCalledWith('test-token-123');
-    expect(result.current.isSuccess).toBe(true);
   });
 });
