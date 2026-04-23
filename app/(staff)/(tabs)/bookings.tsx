@@ -14,8 +14,6 @@ import StatusBadge from '../../../components/StatusBadge';
 import { useBookingAction } from '../../../hooks/useBookingActions';
 import { useTenantBookings } from '../../../hooks/useTenantBookings';
 
-const TERMINAL = ['completed', 'cancelled', 'no_show', 'pending_payment'];
-
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString([], {
     month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
@@ -87,7 +85,7 @@ function BookingActions({ uuid, status }: { uuid: string; status: string }) {
 }
 
 export default function StaffBookingsScreen() {
-  const { data: bookings, isLoading, isError, refetch } = useTenantBookings();
+  const { data: bookings, isLoading, isRefetching, isError, refetch } = useTenantBookings();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   if (isLoading) {
@@ -114,7 +112,7 @@ export default function StaffBookingsScreen() {
       contentContainerStyle={styles.list}
       data={bookings}
       keyExtractor={(b) => b.uuid}
-      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
+      refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       ListHeaderComponent={<Text style={styles.heading}>Bookings</Text>}
       ListEmptyComponent={<Text style={styles.empty}>No bookings.</Text>}
       renderItem={({ item }) => {
