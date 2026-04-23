@@ -26,9 +26,10 @@ function formatDate(iso: string) {
 }
 
 export default function MyBookingsScreen() {
-  const { data: bookings, isLoading, refetch } = useMyBookings();
+  const { data: bookings, isLoading, isError, refetch } = useMyBookings();
   const cancel = useCancelMyBooking();
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const handleCancel = (uuid: string, code: string) => {
     Alert.alert(
@@ -39,7 +40,10 @@ export default function MyBookingsScreen() {
         {
           text: 'Yes, cancel',
           style: 'destructive',
-          onPress: () => cancel.mutate(uuid),
+          onPress: () => {
+            setCancellingId(uuid);
+            cancel.mutate(uuid, { onSettled: () => setCancellingId(null) });
+          },
         },
       ]
     );
@@ -49,6 +53,17 @@ export default function MyBookingsScreen() {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.center}>
+        <Text style={{ color: '#dc2626', marginBottom: 12 }}>Failed to load bookings.</Text>
+        <TouchableOpacity onPress={() => refetch()}>
+          <Text style={{ color: '#2563eb', fontWeight: '600' }}>Retry</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -92,7 +107,7 @@ export default function MyBookingsScreen() {
                     label="Cancel Booking"
                     onPress={() => handleCancel(item.uuid, item.booking_code)}
                     variant="danger"
-                    loading={cancel.isPending}
+                    loading={cancellingId === item.uuid && cancel.isPending}
                   />
                 )}
               </View>
