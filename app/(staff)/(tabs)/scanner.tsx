@@ -21,6 +21,8 @@ type ScannedBooking = {
   end_at: string;
   bookable: { name: string };
   user: { name: string; email: string } | null;
+  _attendeeUuid?: string;
+  _attendeeCheckedIn?: boolean;
 };
 
 export default function ScannerScreen() {
@@ -42,9 +44,26 @@ export default function ScannerScreen() {
       // QR value may be full deep link or just a UUID/code — extract the last segment
       const code = data.replace(/.*\//, '');
 
+      // Detect if this is a UUID (attendee) or booking code
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(code);
+
       try {
-        const response = await api.get(`/api/v1/tenant/bookings/${code}`);
-        setBooking(response.data.data ?? response.data);
+        if (isUuid) {
+          // Individual attendee QR
+          const response = await api.get(`/api/v1/tenant/attendees/${code}`);
+          const data = response.data.data ?? response.data;
+          const { attendee, booking: b } = data;
+          // Store the booking with attendee info attached
+          setBooking({
+            ...b,
+            _attendeeUuid: attendee.uuid,
+            _attendeeCheckedIn: !!attendee.checked_in_at,
+          });
+        } else {
+          // Existing booking code scan
+          const response = await api.get(`/api/v1/tenant/bookings/${code}`);
+          setBooking(response.data.data ?? response.data);
+        }
       } catch (err: any) {
         if (err.response?.status === 404) {
           setScanError('Booking not found. Ensure this is a valid QR code.');
@@ -61,8 +80,15 @@ export default function ScannerScreen() {
   const handleCheckIn = async () => {
     if (!booking) return;
     try {
-      await complete.mutateAsync(booking.uuid);
-      Alert.alert('Checked In!', `${booking.user?.name ?? 'Guest'} has been checked in.`);
+      if (booking._attendeeUuid) {
+        // Check in individual attendee
+        await api.post(`/api/v1/tenant/attendees/${booking._attendeeUuid}/check-in`);
+        Alert.alert('Checked In!', 'Attendee has been checked in.');
+      } else {
+        // Check in booking
+        await complete.mutateAsync(booking.uuid);
+        Alert.alert('Checked In!', `${booking.user?.name ?? 'Guest'} has been checked in.`);
+      }
       resetScanner();
     } catch (err: any) {
       Alert.alert('Error', err.response?.data?.message ?? 'Check-in failed.');
@@ -117,19 +143,21 @@ export default function ScannerScreen() {
               })}
             </Text>
 
-            {booking.status === 'confirmed' && (
+            {booking._attendeeCheckedIn && (
+              <Text style={styles.statusNote}>Already checked in.</Text>
+            )}
+
+            {!booking._attendeeCheckedIn && booking.status === 'confirmed' && (
               <ActionButton
-                label="Check In"
+                label={booking._attendeeUuid ? 'Check In Attendee' : 'Check In'}
                 onPress={handleCheckIn}
                 loading={complete.isPending}
                 style={{ marginTop: 24 }}
               />
             )}
-            {booking.status !== 'confirmed' && (
+            {!booking._attendeeCheckedIn && booking.status !== 'confirmed' && (
               <Text style={styles.statusNote}>
-                {booking.status === 'completed'
-                  ? 'Already checked in.'
-                  : 'Cannot check in — booking is not confirmed.'}
+                Cannot check in — booking is not confirmed.
               </Text>
             )}
 
