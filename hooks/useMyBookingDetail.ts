@@ -11,6 +11,7 @@ export type BookingDetail = {
   currency: string;
   notes: string | null;
   qr_code: string | null;
+  attendee_count: number;
   bookable: { name: string; kind: string };
 };
 

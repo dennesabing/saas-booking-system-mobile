@@ -58,6 +58,9 @@ export default function BookingConfirmScreen() {
           label="Price"
           value={`${(booking.price_snapshot / 100).toFixed(2)} ${booking.currency}`}
         />
+        {booking.attendee_count > 1 && (
+          <Row label="Group size" value={`${booking.attendee_count} people`} />
+        )}
         {booking.notes && <Row label="Notes" value={booking.notes} />}
       </View>
 
