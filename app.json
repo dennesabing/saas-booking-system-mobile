@@ -1,29 +1,29 @@
 {
   "expo": {
-    "name": "UniversalBook",
-    "slug": "universalbook",
-    "scheme": "universalbook",
+    "name": "Koobstel",
+    "slug": "koobstel",
+    "scheme": "koobstel",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.universalbook.app"
+      "bundleIdentifier": "com.koobstel.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.universalbook.app"
+      "package": "com.koobstel.app"
     },
     "plugins": [
       "expo-router",
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow UniversalBook to access your camera for scanning QR codes."
+          "cameraPermission": "Allow Koobstel to access your camera for scanning QR codes."
         }
       ],
       "expo-secure-store"
