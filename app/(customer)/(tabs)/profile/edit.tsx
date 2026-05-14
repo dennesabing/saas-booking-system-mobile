@@ -19,7 +19,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LocationMapPicker from '../../../../components/LocationMapPicker';
+import MapLocationPicker from '../../../../components/MapLocationPicker';
 import { useProfile, useUpdateProfile, useUploadAvatar } from '../../../../hooks/useProfile';
 
 // ── Country codes ──────────────────────────────────────────────────────────
@@ -274,23 +274,24 @@ export default function EditProfileScreen() {
               {!!errors.date_of_birth && <Text style={styles.errorText}>{errors.date_of_birth}</Text>}
             </View>
 
-            {/* Default location */}
+            {/* Default location — read-only, tap to open map */}
             <View style={styles.field}>
-              <View style={styles.fieldLabelRow}>
-                <Text style={styles.fieldLabel}>DEFAULT LOCATION</Text>
-                <TouchableOpacity style={styles.locationBtn} onPress={handleOpenMap} disabled={locating}>
-                  {locating
-                    ? <ActivityIndicator size="small" color="#6366f1" style={{ marginRight: 4 }} />
-                    : <Text style={styles.locationBtnIcon}>🗺️</Text>}
-                  <Text style={styles.locationBtnText}>{locating ? 'Opening map…' : 'Pick on map'}</Text>
-                </TouchableOpacity>
-              </View>
-              <TextInput
-                style={[styles.input, !!errors.default_location && styles.inputError]}
-                value={defaultLocation}
-                onChangeText={(v) => { setDefaultLocation(v); setLocationCoords(null); setErrors((p) => ({ ...p, default_location: undefined })); }}
-                placeholder="City, Country"
-              />
+              <Text style={styles.fieldLabel}>DEFAULT LOCATION</Text>
+              <TouchableOpacity
+                style={[styles.input, styles.locationDisplay, !!errors.default_location && styles.inputError]}
+                onPress={handleOpenMap}
+                disabled={locating}
+                activeOpacity={0.7}
+              >
+                {locating
+                  ? <ActivityIndicator size="small" color="#6366f1" />
+                  : <>
+                      <Text style={[styles.locationDisplayText, !defaultLocation && styles.datePlaceholder]} numberOfLines={1}>
+                        {defaultLocation || 'Tap to pick on map…'}
+                      </Text>
+                      <Text style={styles.locationMapIcon}>🗺️</Text>
+                    </>}
+              </TouchableOpacity>
               {!!errors.default_location && <Text style={styles.errorText}>{errors.default_location}</Text>}
             </View>
 
@@ -343,8 +344,9 @@ export default function EditProfileScreen() {
       )}
 
       {/* ── Map location picker ── */}
-      <LocationMapPicker
+      <MapLocationPicker
         visible={showMapPicker}
+        title="Set Default Location"
         initialLat={mapInitCoords?.lat}
         initialLng={mapInitCoords?.lng}
         onConfirm={(location, lat, lng) => {
@@ -403,10 +405,9 @@ const styles = StyleSheet.create({
   fields: { paddingHorizontal: 16, paddingBottom: 16 },
   field: { marginBottom: 14 },
   fieldLabel: { fontSize: 11, fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.5 },
-  fieldLabelRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
-  locationBtn: { flexDirection: 'row', alignItems: 'center', gap: 3 },
-  locationBtnIcon: { fontSize: 12 },
-  locationBtnText: { fontSize: 12, color: '#6366f1', fontWeight: '600' },
+  locationDisplay: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  locationDisplayText: { flex: 1, fontSize: 14, color: '#0f172a' },
+  locationMapIcon: { fontSize: 18, marginLeft: 8 },
   input: { backgroundColor: 'white', borderWidth: 1.5, borderColor: '#e2e8f0', borderRadius: 12, padding: 13, fontSize: 14, color: '#0f172a' },
   inputError: { borderColor: '#ef4444' },
   errorText: { marginTop: 4, fontSize: 12, color: '#ef4444', fontWeight: '500' },
