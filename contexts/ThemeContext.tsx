@@ -77,11 +77,7 @@ type ThemeContextValue = {
   toggleTheme: () => void;
 };
 
-const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'light',
-  tokens: lightTokens,
-  toggleTheme: () => {},
-});
+const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<ThemeMode>('light');
@@ -89,13 +85,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     SecureStore.getItemAsync(THEME_KEY).then((stored) => {
       if (stored === 'dark') setTheme('dark');
-    });
+    }).catch(() => {});
   }, []);
 
   const toggleTheme = () => {
-    const next: ThemeMode = theme === 'light' ? 'dark' : 'light';
-    setTheme(next);
-    SecureStore.setItemAsync(THEME_KEY, next);
+    setTheme(prev => {
+      const next: ThemeMode = prev === 'light' ? 'dark' : 'light';
+      SecureStore.setItemAsync(THEME_KEY, next).catch(() => {});
+      return next;
+    });
   };
 
   return (
@@ -108,5 +106,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useTheme(): ThemeContextValue {
-  return useContext(ThemeContext);
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error('useTheme must be used within ThemeProvider');
+  return ctx;
 }

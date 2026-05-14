@@ -28,7 +28,7 @@ test('default theme is light', async () => {
 test('toggleTheme switches to dark', async () => {
   const { result } = renderHook(() => useTheme(), { wrapper });
   await act(async () => {});
-  act(() => result.current.toggleTheme());
+  await act(async () => { result.current.toggleTheme(); });
   expect(result.current.theme).toBe('dark');
   expect(result.current.tokens.accent).toBe('#38bdf8');
 });
@@ -36,7 +36,7 @@ test('toggleTheme switches to dark', async () => {
 test('toggleTheme persists to SecureStore', async () => {
   const { result } = renderHook(() => useTheme(), { wrapper });
   await act(async () => {});
-  act(() => result.current.toggleTheme());
+  await act(async () => { result.current.toggleTheme(); });
   expect(SecureStore.setItemAsync).toHaveBeenCalledWith('app_theme', 'dark');
 });
 
@@ -51,7 +51,7 @@ test('toggleTheme back to light', async () => {
   SecureStore.getItemAsync.mockResolvedValueOnce('dark');
   const { result } = renderHook(() => useTheme(), { wrapper });
   await act(async () => {});
-  act(() => result.current.toggleTheme());
+  await act(async () => { result.current.toggleTheme(); });
   expect(result.current.theme).toBe('light');
   expect(SecureStore.setItemAsync).toHaveBeenCalledWith('app_theme', 'light');
 });
