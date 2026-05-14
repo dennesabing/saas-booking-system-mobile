@@ -1,4 +1,3 @@
-// mobile/app/(customer)/(tabs)/profile/index.tsx
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
@@ -7,219 +6,239 @@ import {
   Image,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../../../contexts/ThemeContext';
 import { useLogout } from '../../../../hooks/useAuth';
 import { useProfile } from '../../../../hooks/useProfile';
 
 export default function ProfileHomeScreen() {
   const { data: user, isLoading } = useProfile();
   const logout = useLogout();
+  const { theme, tokens, toggleTheme } = useTheme();
 
   if (isLoading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#6366f1" />
+        <ActivityIndicator size="large" color={tokens.accent} />
       </View>
     );
   }
 
+  const iconBg = { backgroundColor: `${tokens.accent}18` };
+
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      {/* Header */}
-      <LinearGradient
-        colors={['#6366f1', '#8b5cf6']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}
-      >
-        {user?.profile_photo_url ? (
-          <Image source={{ uri: user.profile_photo_url }} style={styles.avatar} />
-        ) : (
-          <View style={styles.avatarPlaceholder}>
-            <Text style={styles.avatarEmoji}>👤</Text>
-          </View>
-        )}
-        <View style={styles.headerInfo}>
-          <Text style={styles.userName}>{user?.name}</Text>
-          <Text style={styles.userEmail}>{user?.email}</Text>
-          <TouchableOpacity
-            style={styles.editBtn}
-            onPress={() => router.push('/profile/edit')}
-          >
-            <Text style={styles.editBtnText}>✏️ Edit Profile</Text>
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
+    <LinearGradient
+      colors={tokens.bg}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.gradient}
+    >
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
 
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Stats strip */}
-        <View style={styles.statsCard}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{user?.stats?.bookings_count ?? 0}</Text>
-            <Text style={styles.statLabel}>BOOKINGS</Text>
-          </View>
-          <View style={[styles.statItem, styles.statBorder]}>
-            <Text style={styles.statValue}>0</Text>
-            <Text style={styles.statLabel}>REVIEWS</Text>
-          </View>
-        </View>
-
-        {/* Upgrade banner */}
-        <View style={styles.upgradeBanner}>
-          <Text style={styles.upgradeIcon}>⚡</Text>
-          <View style={styles.upgradeText}>
-            <Text style={styles.upgradeTitle}>Upgrade to Pro</Text>
-            <Text style={styles.upgradeSub}>Priority booking + unlimited history export</Text>
-          </View>
-          <TouchableOpacity style={styles.upgradeCta}>
-            <Text style={styles.upgradeCtaText}>Upgrade</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Menu group 1 */}
-        <View style={styles.menuGroup}>
-          <TouchableOpacity style={styles.menuItem}>
-            <View style={[styles.menuIcon, { backgroundColor: '#eef2ff' }]}>
-              <Text>💳</Text>
+          {/* Profile header card */}
+          <View style={[styles.headerCard, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
+            {/* Card top row: title + dark mode toggle */}
+            <View style={styles.headerTop}>
+              <Text style={[styles.headerTitle, { color: tokens.textPrimary }]}>My Profile</Text>
+              <View style={styles.toggleRow}>
+                <Text style={styles.moonEmoji}>🌙</Text>
+                <Switch
+                  value={theme === 'dark'}
+                  onValueChange={toggleTheme}
+                  trackColor={{ false: '#d1d5db', true: tokens.accent }}
+                  thumbColor="white"
+                  ios_backgroundColor="#d1d5db"
+                />
+              </View>
             </View>
-            <Text style={styles.menuLabel}>Payment Methods</Text>
-            <Text style={styles.menuValue}>Coming soon</Text>
-            <Text style={styles.menuChevron}>›</Text>
-          </TouchableOpacity>
-        </View>
 
-        {/* Menu group 2 */}
-        <View style={styles.menuGroup}>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => router.push('/profile/notifications')}
-          >
-            <View style={[styles.menuIcon, { backgroundColor: '#f0f9ff' }]}>
-              <Text>🔔</Text>
+            {/* Avatar + info */}
+            <View style={styles.headerInfo}>
+              {user?.profile_photo_url ? (
+                <Image
+                  source={{ uri: user.profile_photo_url }}
+                  style={[styles.avatar, { borderColor: tokens.accent }]}
+                />
+              ) : (
+                <View style={[styles.avatarPlaceholder, { borderColor: tokens.accent }]}>
+                  <Text style={styles.avatarEmoji}>👤</Text>
+                </View>
+              )}
+              <View style={styles.userInfo}>
+                <Text style={[styles.userName, { color: tokens.textPrimary }]}>{user?.name}</Text>
+                <Text style={[styles.userEmail, { color: tokens.textSecondary }]}>{user?.email}</Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.editBtn, { backgroundColor: `${tokens.accent}18`, borderColor: `${tokens.accent}33` }]}
+                onPress={() => router.push('/profile/edit')}
+              >
+                <Text style={[styles.editBtnText, { color: tokens.accent }]}>Edit</Text>
+              </TouchableOpacity>
             </View>
-            <Text style={styles.menuLabel}>Notifications</Text>
-            <Text style={styles.menuChevron}>›</Text>
-          </TouchableOpacity>
-        </View>
+          </View>
 
-        {/* Sign out */}
-        <View style={styles.menuGroup}>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => logout.mutate()}
-            disabled={logout.isPending}
-          >
-            {logout.isPending ? (
-              <ActivityIndicator color="#ef4444" style={{ flex: 1 }} />
-            ) : (
-              <Text style={[styles.menuLabel, styles.signOut]}>Sign Out</Text>
-            )}
-          </TouchableOpacity>
-        </View>
+          {/* Stats strip */}
+          <View style={styles.statsRow}>
+            <View style={[styles.statCard, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
+              <Text style={[styles.statValue, { color: tokens.textPrimary }]}>{user?.stats?.bookings_count ?? 0}</Text>
+              <Text style={[styles.statLabel, { color: tokens.textMuted }]}>BOOKINGS</Text>
+            </View>
+            <View style={[styles.statCard, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
+              <Text style={[styles.statValue, { color: tokens.textPrimary }]}>0</Text>
+              <Text style={[styles.statLabel, { color: tokens.textMuted }]}>REVIEWS</Text>
+            </View>
+          </View>
 
-        <Text style={styles.version}>Koobstel v1.0.0</Text>
-      </ScrollView>
-    </SafeAreaView>
+          {/* Upgrade banner */}
+          <View style={styles.upgradeBanner}>
+            <Text style={styles.upgradeIcon}>⚡</Text>
+            <View style={styles.upgradeText}>
+              <Text style={styles.upgradeTitle}>Upgrade to Pro</Text>
+              <Text style={styles.upgradeSub}>Priority booking + unlimited history export</Text>
+            </View>
+            <TouchableOpacity style={styles.upgradeCta}>
+              <Text style={styles.upgradeCtaText}>Upgrade</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Menu group 1 */}
+          <View style={[styles.menuGroup, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
+            <TouchableOpacity style={[styles.menuItem, { borderBottomColor: `${tokens.accent}12` }]}>
+              <View style={[styles.menuIcon, iconBg]}>
+                <Text>💳</Text>
+              </View>
+              <Text style={[styles.menuLabel, { color: tokens.textPrimary }]}>Payment Methods</Text>
+              <Text style={[styles.menuValue, { color: tokens.textMuted }]}>Coming soon</Text>
+              <Text style={[styles.menuChevron, { color: tokens.textMuted }]}>›</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Menu group 2 */}
+          <View style={[styles.menuGroup, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
+            <TouchableOpacity
+              style={[styles.menuItem, { borderBottomColor: 'transparent' }]}
+              onPress={() => router.push('/profile/notifications')}
+            >
+              <View style={[styles.menuIcon, iconBg]}>
+                <Text>🔔</Text>
+              </View>
+              <Text style={[styles.menuLabel, { color: tokens.textPrimary }]}>Notifications</Text>
+              <Text style={[styles.menuChevron, { color: tokens.textMuted }]}>›</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Sign out */}
+          <View style={[styles.menuGroup, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
+            <TouchableOpacity
+              style={[styles.menuItem, { borderBottomColor: 'transparent' }]}
+              onPress={() => logout.mutate()}
+              disabled={logout.isPending}
+            >
+              {logout.isPending ? (
+                <ActivityIndicator color="#ef4444" style={{ flex: 1 }} />
+              ) : (
+                <Text style={styles.signOut}>Sign Out</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          <Text style={[styles.version, { color: tokens.textMuted }]}>Koobstel v1.0.0</Text>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#8b5cf6' },
+  gradient: { flex: 1 },
+  safe: { flex: 1, backgroundColor: 'transparent' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  header: {
+  scroll: { flex: 1 },
+
+  // Header card
+  headerCard: {
+    borderRadius: 20,
+    borderWidth: 1,
+    marginHorizontal: 16,
+    marginTop: 8,
+    marginBottom: 12,
+    padding: 16,
+  },
+  headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 28,
+    justifyContent: 'space-between',
+    marginBottom: 14,
   },
-  avatar: { width: 72, height: 72, borderRadius: 36, borderWidth: 3, borderColor: 'rgba(255,255,255,0.4)' },
+  headerTitle: { fontSize: 15, fontWeight: '700' },
+  toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  moonEmoji: { fontSize: 14 },
+  headerInfo: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  avatar: { width: 52, height: 52, borderRadius: 26, borderWidth: 2 },
   avatarPlaceholder: {
-    width: 72, height: 72, borderRadius: 36,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderWidth: 3, borderColor: 'rgba(255,255,255,0.4)',
+    width: 52, height: 52, borderRadius: 26,
+    borderWidth: 2,
+    backgroundColor: 'rgba(14,165,233,0.12)',
     alignItems: 'center', justifyContent: 'center',
   },
-  avatarEmoji: { fontSize: 32 },
-  headerInfo: { flex: 1 },
-  userName: { fontSize: 20, fontWeight: '800', color: 'white', marginBottom: 2 },
-  userEmail: { fontSize: 13, color: 'rgba(255,255,255,0.75)', marginBottom: 8 },
+  avatarEmoji: { fontSize: 24 },
+  userInfo: { flex: 1 },
+  userName: { fontSize: 15, fontWeight: '700', marginBottom: 2 },
+  userEmail: { fontSize: 12 },
   editBtn: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)',
-    borderRadius: 10, paddingHorizontal: 12, paddingVertical: 5,
-    alignSelf: 'flex-start',
+    borderRadius: 10, borderWidth: 1,
+    paddingHorizontal: 12, paddingVertical: 5,
   },
-  editBtnText: { color: 'white', fontWeight: '700', fontSize: 12 },
-  scroll: { flex: 1, backgroundColor: '#f8fafc' },
-  statsCard: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    marginHorizontal: 16,
-    marginTop: -16,
-    padding: 16,
-    flexDirection: 'row',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-    marginBottom: 16,
+  editBtnText: { fontWeight: '700', fontSize: 12 },
+
+  // Stats
+  statsRow: { flexDirection: 'row', gap: 10, marginHorizontal: 16, marginBottom: 12 },
+  statCard: {
+    flex: 1, borderRadius: 16, borderWidth: 1,
+    padding: 14, alignItems: 'center',
   },
-  statItem: { flex: 1, alignItems: 'center' },
-  statBorder: { borderLeftWidth: 1, borderLeftColor: '#f1f5f9' },
-  statValue: { fontSize: 22, fontWeight: '800', color: '#0f172a' },
-  statLabel: { fontSize: 10, color: '#94a3b8', fontWeight: '600', marginTop: 2 },
+  statValue: { fontSize: 22, fontWeight: '800' },
+  statLabel: { fontSize: 10, fontWeight: '600', marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 },
+
+  // Upgrade banner
   upgradeBanner: {
     backgroundColor: '#f59e0b',
     borderRadius: 14,
     marginHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 12,
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
   },
-  upgradeIcon: { fontSize: 28 },
+  upgradeIcon: { fontSize: 26 },
   upgradeText: { flex: 1 },
-  upgradeTitle: { fontSize: 14, fontWeight: '800', color: 'white' },
-  upgradeSub: { fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 2 },
-  upgradeCta: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    paddingHorizontal: 12, paddingVertical: 6,
-  },
+  upgradeTitle: { fontSize: 13, fontWeight: '800', color: 'white' },
+  upgradeSub: { fontSize: 11, color: 'rgba(255,255,255,0.8)', marginTop: 2 },
+  upgradeCta: { backgroundColor: 'white', borderRadius: 10, paddingHorizontal: 12, paddingVertical: 6 },
   upgradeCtaText: { color: '#f59e0b', fontWeight: '800', fontSize: 12 },
+
+  // Menu
   menuGroup: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    marginHorizontal: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 3,
-    elevation: 1,
+    borderRadius: 16, borderWidth: 1,
+    marginHorizontal: 16, marginBottom: 10,
     overflow: 'hidden',
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    paddingHorizontal: 16, paddingVertical: 13,
     borderBottomWidth: 1,
-    borderBottomColor: '#f8fafc',
   },
-  menuIcon: { width: 36, height: 36, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
-  menuLabel: { flex: 1, fontSize: 14, fontWeight: '600', color: '#0f172a' },
-  menuValue: { fontSize: 13, color: '#94a3b8', marginRight: 6 },
-  menuChevron: { fontSize: 18, color: '#cbd5e1' },
-  signOut: { color: '#ef4444', textAlign: 'center', fontWeight: '700' },
-  version: { textAlign: 'center', fontSize: 11, color: '#cbd5e1', padding: 16 },
+  menuIcon: { width: 32, height: 32, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
+  menuLabel: { flex: 1, fontSize: 13, fontWeight: '600' },
+  menuValue: { fontSize: 12, marginRight: 4 },
+  menuChevron: { fontSize: 18 },
+  signOut: { flex: 1, color: '#ef4444', textAlign: 'center', fontWeight: '700', fontSize: 13 },
+  version: { textAlign: 'center', fontSize: 11, padding: 16 },
 });
