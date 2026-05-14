@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -12,6 +13,7 @@ import {
 } from 'react-native';
 import ActionButton from '../../../components/ActionButton';
 import StatusBadge from '../../../components/StatusBadge';
+import { useTheme } from '../../../contexts/ThemeContext';
 import { useCancelMyBooking, useMyBookings } from '../../../hooks/useMyBookings';
 
 const TERMINAL = ['completed', 'cancelled', 'no_show', 'pending_payment'];
@@ -28,6 +30,7 @@ function formatDate(iso: string) {
 export default function MyBookingsScreen() {
   const { data: bookings, isLoading, isError, refetch } = useMyBookings();
   const cancel = useCancelMyBooking();
+  const { tokens } = useTheme();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
@@ -51,92 +54,115 @@ export default function MyBookingsScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" />
-      </View>
+      <LinearGradient colors={tokens.bg} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.gradient}>
+        <View style={styles.center}>
+          <ActivityIndicator size="large" color={tokens.accent} />
+        </View>
+      </LinearGradient>
     );
   }
 
   if (isError) {
     return (
-      <View style={styles.center}>
-        <Text style={{ color: '#dc2626', marginBottom: 12 }}>Failed to load bookings.</Text>
-        <TouchableOpacity onPress={() => refetch()}>
-          <Text style={{ color: '#2563eb', fontWeight: '600' }}>Retry</Text>
-        </TouchableOpacity>
-      </View>
+      <LinearGradient colors={tokens.bg} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.gradient}>
+        <View style={styles.center}>
+          <Text style={[styles.errorText, { color: '#dc2626' }]}>Failed to load bookings.</Text>
+          <TouchableOpacity onPress={() => refetch()}>
+            <Text style={{ color: tokens.accent, fontWeight: '600' }}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
     );
   }
 
   return (
-    <FlatList
-      contentContainerStyle={styles.list}
-      data={bookings}
-      keyExtractor={(b) => b.uuid}
-      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
-      ListHeaderComponent={<Text style={styles.heading}>My Bookings</Text>}
-      ListEmptyComponent={
-        <Text style={styles.empty}>No bookings yet. Scan a QR code to book.</Text>
-      }
-      renderItem={({ item }) => {
-        const expanded = expandedId === item.uuid;
-        const cancellable = !TERMINAL.includes(item.status);
-        return (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() => setExpandedId(expanded ? null : item.uuid)}
-          >
-            <View style={styles.cardRow}>
-              <Text style={styles.cardName}>{item.bookable.name}</Text>
-              <StatusBadge status={item.status} />
-            </View>
-            <Text style={styles.cardDate}>{formatDate(item.start_at)}</Text>
-            <Text style={styles.cardCode}>#{item.booking_code}</Text>
-
-            {expanded && (
-              <View style={styles.expanded}>
-                {item.qr_code && (
-                  <ActionButton
-                    label="View Details"
-                    onPress={() => router.push(`/(guest)/booking/confirm/${item.uuid}`)}
-                    variant="secondary"
-                  />
-                )}
-                {cancellable && (
-                  <ActionButton
-                    label="Cancel Booking"
-                    onPress={() => handleCancel(item.uuid, item.booking_code)}
-                    variant="danger"
-                    loading={cancellingId === item.uuid && cancel.isPending}
-                  />
-                )}
+    <LinearGradient colors={tokens.bg} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.gradient}>
+      <FlatList
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+        data={bookings}
+        keyExtractor={(b) => b.uuid}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={refetch}
+            tintColor={tokens.accent}
+          />
+        }
+        ListHeaderComponent={
+          <Text style={[styles.heading, { color: tokens.textPrimary }]}>My Bookings</Text>
+        }
+        ListEmptyComponent={
+          <Text style={[styles.empty, { color: tokens.textMuted }]}>
+            No bookings yet. Scan a QR code to book.
+          </Text>
+        }
+        renderItem={({ item }) => {
+          const expanded = expandedId === item.uuid;
+          const cancellable = !TERMINAL.includes(item.status);
+          return (
+            <TouchableOpacity
+              style={[
+                styles.card,
+                {
+                  backgroundColor: tokens.surface,
+                  borderColor: tokens.surfaceBorder,
+                  borderWidth: 1,
+                  ...tokens.cardShadow,
+                },
+              ]}
+              onPress={() => setExpandedId(expanded ? null : item.uuid)}
+            >
+              <View style={styles.cardRow}>
+                <Text style={[styles.cardName, { color: tokens.textPrimary }]}>{item.bookable.name}</Text>
+                <StatusBadge status={item.status} />
               </View>
-            )}
-          </TouchableOpacity>
-        );
-      }}
-    />
+              <Text style={[styles.cardDate, { color: tokens.textSecondary }]}>{formatDate(item.start_at)}</Text>
+              <Text style={[styles.cardCode, { color: tokens.textMuted }]}>#{item.booking_code}</Text>
+
+              {expanded && (
+                <View style={[styles.expanded, { borderTopColor: tokens.surfaceBorder }]}>
+                  {item.qr_code && (
+                    <ActionButton
+                      label="View Details"
+                      onPress={() => router.push(`/(guest)/booking/confirm/${item.uuid}`)}
+                      variant="secondary"
+                    />
+                  )}
+                  {cancellable && (
+                    <ActionButton
+                      label="Cancel Booking"
+                      onPress={() => handleCancel(item.uuid, item.booking_code)}
+                      variant="danger"
+                      loading={cancellingId === item.uuid && cancel.isPending}
+                    />
+                  )}
+                </View>
+              )}
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  list: { padding: 16 },
-  heading: { fontSize: 22, fontWeight: '700', marginBottom: 16, color: '#111' },
-  empty: { color: '#9ca3af', textAlign: 'center', marginTop: 32, fontSize: 15 },
+  errorText: { marginBottom: 12 },
+  list: { flex: 1 },
+  listContent: { padding: 16 },
+  heading: { fontSize: 22, fontWeight: '700', marginBottom: 16 },
+  empty: { textAlign: 'center', marginTop: 32, fontSize: 15 },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    marginBottom: 10,
   },
   cardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-  cardName: { fontSize: 16, fontWeight: '600', color: '#111', flex: 1, marginRight: 8 },
-  cardDate: { color: '#6b7280', fontSize: 13, marginBottom: 2 },
-  cardCode: { color: '#9ca3af', fontSize: 12 },
-  expanded: { marginTop: 12, borderTopWidth: 1, borderTopColor: '#f3f4f6', paddingTop: 12 },
+  cardName: { fontSize: 15, fontWeight: '600', flex: 1, marginRight: 8 },
+  cardDate: { fontSize: 13, marginBottom: 2 },
+  cardCode: { fontSize: 12 },
+  expanded: { marginTop: 12, borderTopWidth: 1, paddingTop: 12 },
 });
