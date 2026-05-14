@@ -54,7 +54,7 @@ export function useLogin() {
       email: string;
       password: string;
     }) => {
-      const { data } = await api.post('/api/login', { email, password });
+      const { data } = await api.post('/api/v1/login', { email, password });
       return data.data ?? data;
     },
     onSuccess: async (data) => {
@@ -77,7 +77,7 @@ export function useRegister() {
       password: string;
       password_confirmation: string;
     }) => {
-      const { data } = await api.post('/api/register', {
+      const { data } = await api.post('/api/v1/register', {
         name,
         email,
         password,
@@ -95,7 +95,7 @@ export function useLogout() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async () => {
-      await api.post('/api/logout');
+      await api.post('/api/v1/logout');
     },
     onSettled: async () => {
       await clearToken();
