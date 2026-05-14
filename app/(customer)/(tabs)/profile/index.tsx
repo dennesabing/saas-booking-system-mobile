@@ -1,4 +1,5 @@
 // mobile/app/(customer)/(tabs)/profile/index.tsx
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
 import {
@@ -29,7 +30,12 @@ export default function ProfileHomeScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       {/* Header */}
-      <View style={styles.header}>
+      <LinearGradient
+        colors={['#6366f1', '#8b5cf6']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
         {user?.profile_photo_url ? (
           <Image source={{ uri: user.profile_photo_url }} style={styles.avatar} />
         ) : (
@@ -47,7 +53,7 @@ export default function ProfileHomeScreen() {
             <Text style={styles.editBtnText}>✏️ Edit Profile</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </LinearGradient>
 
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Stats strip */}
@@ -141,10 +147,9 @@ export default function ProfileHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#6366f1' },
+  safe: { flex: 1, backgroundColor: '#8b5cf6' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   header: {
-    backgroundColor: '#6366f1',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,

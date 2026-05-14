@@ -26,12 +26,17 @@ const TYPE_PREFS: { key: PrefKey; label: string }[] = [
 export default function NotificationsScreen() {
   const { data: user } = useProfile();
   const updatePrefs = useUpdateNotificationPrefs();
+  const [pendingKey, setPendingKey] = React.useState<PrefKey | null>(null);
 
   const prefs = user?.notification_preferences;
 
   const toggle = (key: PrefKey) => {
-    if (!prefs) return;
-    updatePrefs.mutate({ [key]: !prefs[key] });
+    if (!prefs || pendingKey !== null) return;
+    setPendingKey(key);
+    updatePrefs.mutate(
+      { [key]: !prefs[key] },
+      { onSettled: () => setPendingKey(null) }
+    );
   };
 
   return (
@@ -58,7 +63,7 @@ export default function NotificationsScreen() {
                 onValueChange={() => toggle(key)}
                 trackColor={{ false: '#e2e8f0', true: '#6366f1' }}
                 thumbColor="white"
-                disabled={updatePrefs.isPending}
+                disabled={pendingKey === key}
               />
             </View>
           ))}
@@ -75,7 +80,7 @@ export default function NotificationsScreen() {
                 onValueChange={() => toggle(key)}
                 trackColor={{ false: '#e2e8f0', true: '#6366f1' }}
                 thumbColor="white"
-                disabled={updatePrefs.isPending}
+                disabled={pendingKey === key}
               />
             </View>
           ))}
