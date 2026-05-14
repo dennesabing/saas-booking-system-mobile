@@ -66,10 +66,6 @@ export default function ProfileHomeScreen() {
             <Text style={styles.statValue}>0</Text>
             <Text style={styles.statLabel}>REVIEWS</Text>
           </View>
-          <View style={[styles.statItem, styles.statBorder]}>
-            <Text style={styles.statValue}>{user?.stats?.organizations_count ?? 0}</Text>
-            <Text style={styles.statLabel}>TENANTS</Text>
-          </View>
         </View>
 
         {/* Upgrade banner */}
@@ -94,13 +90,6 @@ export default function ProfileHomeScreen() {
             <Text style={styles.menuValue}>Coming soon</Text>
             <Text style={styles.menuChevron}>›</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <View style={[styles.menuIcon, { backgroundColor: '#f0fdf4' }]}>
-              <Text>🎟️</Text>
-            </View>
-            <Text style={styles.menuLabel}>Vouchers & Credits</Text>
-            <Text style={styles.menuChevron}>›</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Menu group 2 */}
@@ -113,14 +102,6 @@ export default function ProfileHomeScreen() {
               <Text>🔔</Text>
             </View>
             <Text style={styles.menuLabel}>Notifications</Text>
-            <Text style={styles.menuChevron}>›</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
-            <View style={[styles.menuIcon, { backgroundColor: '#f8fafc' }]}>
-              <Text>🌐</Text>
-            </View>
-            <Text style={styles.menuLabel}>Language</Text>
-            <Text style={styles.menuValue}>English</Text>
             <Text style={styles.menuChevron}>›</Text>
           </TouchableOpacity>
         </View>

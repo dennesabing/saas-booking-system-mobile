@@ -1,6 +1,6 @@
 // mobile/app/(customer)/(tabs)/profile/notifications.tsx
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NotificationPreferences } from '../../../../hooks/useAuth';
@@ -26,16 +26,26 @@ const TYPE_PREFS: { key: PrefKey; label: string }[] = [
 export default function NotificationsScreen() {
   const { data: user } = useProfile();
   const updatePrefs = useUpdateNotificationPrefs();
-  const [pendingKey, setPendingKey] = React.useState<PrefKey | null>(null);
+  const [localPrefs, setLocalPrefs] = useState<NotificationPreferences | null>(null);
 
-  const prefs = user?.notification_preferences;
+  // Seed local state from server once on load
+  useEffect(() => {
+    if (user?.notification_preferences) {
+      setLocalPrefs(user.notification_preferences);
+    }
+  }, [user?.notification_preferences]);
 
   const toggle = (key: PrefKey) => {
-    if (!prefs || pendingKey !== null) return;
-    setPendingKey(key);
+    if (!localPrefs) return;
+    const newValue = !localPrefs[key];
+    // Flip immediately — no waiting
+    setLocalPrefs({ ...localPrefs, [key]: newValue });
+    // Sync to server in background; revert on failure
     updatePrefs.mutate(
-      { [key]: !prefs[key] },
-      { onSettled: () => setPendingKey(null) }
+      { [key]: newValue },
+      {
+        onError: () => setLocalPrefs((prev) => prev ? { ...prev, [key]: !newValue } : prev),
+      }
     );
   };
 
@@ -59,11 +69,10 @@ export default function NotificationsScreen() {
               </View>
               <Text style={styles.menuLabel}>{label}</Text>
               <Switch
-                value={prefs?.[key] ?? false}
+                value={localPrefs?.[key] ?? false}
                 onValueChange={() => toggle(key)}
                 trackColor={{ false: '#e2e8f0', true: '#6366f1' }}
                 thumbColor="white"
-                disabled={pendingKey === key}
               />
             </View>
           ))}
@@ -76,11 +85,10 @@ export default function NotificationsScreen() {
             <View key={key} style={[styles.menuItem, index < TYPE_PREFS.length - 1 && styles.menuBorder]}>
               <Text style={styles.menuLabel}>{label}</Text>
               <Switch
-                value={prefs?.[key] ?? false}
+                value={localPrefs?.[key] ?? false}
                 onValueChange={() => toggle(key)}
                 trackColor={{ false: '#e2e8f0', true: '#6366f1' }}
                 thumbColor="white"
-                disabled={pendingKey === key}
               />
             </View>
           ))}

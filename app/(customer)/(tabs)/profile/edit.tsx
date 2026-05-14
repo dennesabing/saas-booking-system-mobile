@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -39,6 +40,7 @@ export default function EditProfileScreen() {
   }, [user]);
 
   const handleSave = async () => {
+    Keyboard.dismiss();
     try {
       await updateProfile.mutateAsync({
         name: name.trim() || undefined,
@@ -71,9 +73,6 @@ export default function EditProfileScreen() {
           <Text style={styles.backBtnText}>‹</Text>
         </TouchableOpacity>
         <Text style={styles.navTitle}>Edit Profile</Text>
-        <TouchableOpacity onPress={handleSave} disabled={isSaving}>
-          <Text style={[styles.saveLink, isSaving && styles.saveLinkDisabled]}>Save</Text>
-        </TouchableOpacity>
       </View>
 
       <KeyboardAvoidingView
@@ -120,15 +119,18 @@ export default function EditProfileScreen() {
               <TextInput style={styles.input} value={defaultLocation} onChangeText={setDefaultLocation} placeholder="City, Country" />
             </View>
 
-            <TouchableOpacity
-              style={[styles.saveBtn, isSaving && styles.saveBtnDisabled]}
-              onPress={handleSave}
-              disabled={isSaving}
-            >
-              {isSaving ? <ActivityIndicator color="white" /> : <Text style={styles.saveBtnText}>Save Changes</Text>}
-            </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={[styles.saveBtn, isSaving && styles.saveBtnDisabled]}
+            onPress={handleSave}
+            disabled={isSaving}
+          >
+            {isSaving ? <ActivityIndicator color="white" /> : <Text style={styles.saveBtnText}>Save Changes</Text>}
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -141,15 +143,14 @@ const styles = StyleSheet.create({
   backBtn: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#f1f5f9', alignItems: 'center', justifyContent: 'center' },
   backBtnText: { fontSize: 20, color: '#0f172a', lineHeight: 22 },
   navTitle: { flex: 1, fontSize: 16, fontWeight: '700', color: '#0f172a' },
-  saveLink: { fontSize: 14, color: '#6366f1', fontWeight: '700' },
-  saveLinkDisabled: { opacity: 0.5 },
   scroll: { flex: 1 },
   avatarSection: { alignItems: 'center', paddingVertical: 24 },
   avatar: { width: 80, height: 80, borderRadius: 40, marginBottom: 10, borderWidth: 3, borderColor: '#6366f1' },
   avatarPlaceholder: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#6366f1', alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
   avatarEmoji: { fontSize: 36 },
   changePhoto: { fontSize: 13, color: '#6366f1', fontWeight: '700' },
-  fields: { paddingHorizontal: 16, paddingBottom: 32 },
+  fields: { paddingHorizontal: 16, paddingBottom: 16 },
+  footer: { paddingHorizontal: 16, paddingVertical: 12, paddingBottom: 24, backgroundColor: '#f8fafc' },
   field: { marginBottom: 14 },
   fieldLabel: { fontSize: 11, fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
   input: { backgroundColor: 'white', borderWidth: 1.5, borderColor: '#e2e8f0', borderRadius: 12, padding: 13, fontSize: 14, color: '#0f172a' },
