@@ -4,12 +4,33 @@ import { useEffect, useState } from 'react';
 import api from '../lib/api';
 import { clearToken, getToken, setToken } from '../lib/token';
 
+export type NotificationPreferences = {
+  push: boolean;
+  email: boolean;
+  sms: boolean;
+  booking_confirmations: boolean;
+  appointment_reminders: boolean;
+  waitlist_updates: boolean;
+  review_requests: boolean;
+  cancellation_alerts: boolean;
+  promotional_offers: boolean;
+};
+
 export type MeUser = {
   id: string | number;
   name: string;
   email: string;
+  profile_photo_url: string | null;
   current_organization_id: number | null;
   permissions: string[];
+  mobile_number: string | null;
+  date_of_birth: string | null;
+  default_location: string | null;
+  notification_preferences: NotificationPreferences;
+  stats: {
+    bookings_count: number;
+    organizations_count: number;
+  };
 };
 
 export function isStaff(user: MeUser | undefined): boolean {
