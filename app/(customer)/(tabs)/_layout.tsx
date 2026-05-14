@@ -9,7 +9,8 @@ function CalendarIcon({ color, filled }: { color: string; filled: boolean }) {
     <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
       <Rect
         x={3} y={4} width={18} height={18} rx={2}
-        stroke={color} strokeWidth={filled ? 0 : 1.8}
+        stroke={filled ? 'none' : color}
+        strokeWidth={1.8}
         fill={filled ? color : 'none'}
       />
       <Line x1={16} y1={2} x2={16} y2={6} stroke={fg} strokeWidth={1.8} strokeLinecap="round" />
@@ -23,16 +24,19 @@ function CalendarIcon({ color, filled }: { color: string; filled: boolean }) {
 }
 
 function PersonIcon({ color, filled }: { color: string; filled: boolean }) {
+  const fg = filled ? 'white' : color;
   return (
     <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
       <Circle
         cx={12} cy={7} r={4}
-        stroke={color} strokeWidth={filled ? 0 : 1.8}
+        stroke={filled ? 'none' : color}
+        strokeWidth={1.8}
         fill={filled ? color : 'none'}
       />
       <Path
         d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"
-        stroke={color} strokeWidth={filled ? 0 : 1.8}
+        stroke={filled ? 'none' : fg}
+        strokeWidth={1.8}
         fill={filled ? color : 'none'}
         strokeLinecap="round"
       />

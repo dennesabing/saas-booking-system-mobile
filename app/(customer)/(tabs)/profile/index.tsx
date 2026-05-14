@@ -66,7 +66,7 @@ export default function ProfileHomeScreen() {
                   style={[styles.avatar, { borderColor: tokens.accent }]}
                 />
               ) : (
-                <View style={[styles.avatarPlaceholder, { borderColor: tokens.accent }]}>
+                <View style={[styles.avatarPlaceholder, { borderColor: tokens.accent, backgroundColor: `${tokens.accent}18` }]}>
                   <Text style={styles.avatarEmoji}>👤</Text>
                 </View>
               )}
@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
   avatarPlaceholder: {
     width: 52, height: 52, borderRadius: 26,
     borderWidth: 2,
-    backgroundColor: 'rgba(14,165,233,0.12)',
     alignItems: 'center', justifyContent: 'center',
   },
   avatarEmoji: { fontSize: 24 },
