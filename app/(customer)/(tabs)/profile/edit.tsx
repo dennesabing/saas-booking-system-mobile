@@ -1,5 +1,6 @@
 // mobile/app/(customer)/(tabs)/profile/edit.tsx
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -18,6 +19,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LocationMapPicker from '../../../../components/LocationMapPicker';
 import { useProfile, useUpdateProfile, useUploadAvatar } from '../../../../hooks/useProfile';
 
 // ── Country codes ──────────────────────────────────────────────────────────
@@ -73,6 +75,10 @@ export default function EditProfileScreen() {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showCountryPicker, setShowCountryPicker] = useState(false);
+  const [showMapPicker, setShowMapPicker] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const [mapInitCoords, setMapInitCoords] = useState<{ lat: number; lng: number } | undefined>();
+  const [locationCoords, setLocationCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -84,6 +90,9 @@ export default function EditProfileScreen() {
         const parsed = parseStoredMobile(user.mobile_number);
         setCountry(parsed.country);
         setMobileDigits(parsed.digits);
+      }
+      if (user.default_location_lat != null && user.default_location_lng != null) {
+        setLocationCoords({ lat: user.default_location_lat, lng: user.default_location_lng });
       }
     }
   }, [user]);
@@ -111,6 +120,8 @@ export default function EditProfileScreen() {
         mobile_number: mobile,
         date_of_birth: dateOfBirth || null,
         default_location: defaultLocation.trim() || null,
+        default_location_lat: locationCoords?.lat ?? null,
+        default_location_lng: locationCoords?.lng ?? null,
       });
       router.back();
     } catch (err: any) {
@@ -143,6 +154,25 @@ export default function EditProfileScreen() {
       const iso = selected.toISOString().split('T')[0];
       setDateOfBirth(iso);
       setErrors((prev) => ({ ...prev, date_of_birth: undefined }));
+    }
+  };
+
+  const handleOpenMap = async () => {
+    setErrors((p) => ({ ...p, default_location: undefined }));
+    setLocating(true);
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+        setMapInitCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      } else {
+        setMapInitCoords(undefined); // fall back to Manila default
+      }
+    } catch {
+      setMapInitCoords(undefined);
+    } finally {
+      setLocating(false);
+      setShowMapPicker(true);
     }
   };
 
@@ -246,11 +276,19 @@ export default function EditProfileScreen() {
 
             {/* Default location */}
             <View style={styles.field}>
-              <Text style={styles.fieldLabel}>DEFAULT LOCATION</Text>
+              <View style={styles.fieldLabelRow}>
+                <Text style={styles.fieldLabel}>DEFAULT LOCATION</Text>
+                <TouchableOpacity style={styles.locationBtn} onPress={handleOpenMap} disabled={locating}>
+                  {locating
+                    ? <ActivityIndicator size="small" color="#6366f1" style={{ marginRight: 4 }} />
+                    : <Text style={styles.locationBtnIcon}>🗺️</Text>}
+                  <Text style={styles.locationBtnText}>{locating ? 'Opening map…' : 'Pick on map'}</Text>
+                </TouchableOpacity>
+              </View>
               <TextInput
                 style={[styles.input, !!errors.default_location && styles.inputError]}
                 value={defaultLocation}
-                onChangeText={(v) => { setDefaultLocation(v); setErrors((p) => ({ ...p, default_location: undefined })); }}
+                onChangeText={(v) => { setDefaultLocation(v); setLocationCoords(null); setErrors((p) => ({ ...p, default_location: undefined })); }}
                 placeholder="City, Country"
               />
               {!!errors.default_location && <Text style={styles.errorText}>{errors.default_location}</Text>}
@@ -304,6 +342,19 @@ export default function EditProfileScreen() {
         )
       )}
 
+      {/* ── Map location picker ── */}
+      <LocationMapPicker
+        visible={showMapPicker}
+        initialLat={mapInitCoords?.lat}
+        initialLng={mapInitCoords?.lng}
+        onConfirm={(location, lat, lng) => {
+          setDefaultLocation(location);
+          setLocationCoords({ lat, lng });
+          setShowMapPicker(false);
+        }}
+        onClose={() => setShowMapPicker(false)}
+      />
+
       {/* ── Country code picker ── */}
       <Modal visible={showCountryPicker} animationType="slide" transparent>
         <View style={styles.countryOverlay}>
@@ -351,7 +402,11 @@ const styles = StyleSheet.create({
   changePhoto: { fontSize: 13, color: '#6366f1', fontWeight: '700' },
   fields: { paddingHorizontal: 16, paddingBottom: 16 },
   field: { marginBottom: 14 },
-  fieldLabel: { fontSize: 11, fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
+  fieldLabel: { fontSize: 11, fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.5 },
+  fieldLabelRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
+  locationBtn: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  locationBtnIcon: { fontSize: 12 },
+  locationBtnText: { fontSize: 12, color: '#6366f1', fontWeight: '600' },
   input: { backgroundColor: 'white', borderWidth: 1.5, borderColor: '#e2e8f0', borderRadius: 12, padding: 13, fontSize: 14, color: '#0f172a' },
   inputError: { borderColor: '#ef4444' },
   errorText: { marginTop: 4, fontSize: 12, color: '#ef4444', fontWeight: '500' },

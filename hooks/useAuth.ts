@@ -26,6 +26,8 @@ export type MeUser = {
   mobile_number: string | null;
   date_of_birth: string | null;
   default_location: string | null;
+  default_location_lat: number | null;
+  default_location_lng: number | null;
   notification_preferences: NotificationPreferences;
   stats: {
     bookings_count: number;

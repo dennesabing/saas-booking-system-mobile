@@ -26,7 +26,13 @@
           "cameraPermission": "Allow Koobstel to access your camera for scanning QR codes."
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow Koobstel to access your location to set your default location."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

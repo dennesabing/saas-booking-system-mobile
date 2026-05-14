@@ -17,6 +17,8 @@ export function useUpdateProfile() {
       mobile_number: string | null;
       date_of_birth: string | null;
       default_location: string | null;
+      default_location_lat: number | null;
+      default_location_lng: number | null;
     }>) => {
       const { data: res } = await api.put('/api/v1/me', data);
       return res.data ?? res;
