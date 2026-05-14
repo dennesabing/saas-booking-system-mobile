@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { OfflineBanner } from '../../../../components/OfflineBanner';
 import { useAvailability } from '../../../../hooks/useAvailability';
 import { useCreateBooking } from '../../../../hooks/useCreateBooking';
+import { useNetworkStatus } from '../../../../hooks/useNetworkStatus';
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -27,6 +29,7 @@ export default function BookableDetailScreen() {
 
   const { data: windows, isLoading, isError } = useAvailability(uuid, selectedDate, headcount);
   const { mutate: createBooking, isPending } = useCreateBooking();
+  const { isConnected } = useNetworkStatus();
 
   const selectedWindowData = windows?.find(
     (w) => w.start_at === selectedWindow
@@ -51,6 +54,8 @@ export default function BookableDetailScreen() {
 
   return (
     <View style={styles.container}>
+      {!isConnected && <OfflineBanner />}
+
       {/* Date picker — simple prev/next day for now */}
       <View style={styles.datePicker}>
         <TouchableOpacity
@@ -145,9 +150,9 @@ export default function BookableDetailScreen() {
       {/* Book button */}
       {selectedWindowData && (
         <TouchableOpacity
-          style={[styles.bookBtn, isPending && styles.bookBtnDisabled]}
+          style={[styles.bookBtn, (isPending || !isConnected) && styles.bookBtnDisabled]}
           onPress={handleBook}
-          disabled={isPending}
+          disabled={isPending || !isConnected}
         >
           <Text style={styles.bookBtnText}>
             {isPending ? 'Booking…' : `Book for ${headcount} ${headcount === 1 ? 'person' : 'people'}`}
