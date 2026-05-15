@@ -56,6 +56,7 @@ export default function CustomerTabLayout() {
           backgroundColor: tokens.tabBg,
           borderTopColor: tokens.tabBorder,
           borderTopWidth: 1,
+          elevation: 0,
         },
       }}
     >

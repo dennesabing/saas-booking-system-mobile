@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   gradient: { flex: 1 },
   safe: { flex: 1, backgroundColor: 'transparent' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  scroll: { flex: 1 },
+  scroll: { flex: 1, backgroundColor: 'transparent' },
 
   // Header card
   headerCard: {
@@ -175,11 +175,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 14,
+    backgroundColor: 'transparent',
   },
   headerTitle: { fontSize: 15, fontWeight: '700' },
-  toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  toggleRow: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'transparent' },
   moonEmoji: { fontSize: 14 },
-  headerInfo: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  headerInfo: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: 'transparent' },
   avatar: { width: 52, height: 52, borderRadius: 26, borderWidth: 2 },
   avatarPlaceholder: {
     width: 52, height: 52, borderRadius: 26,
@@ -233,6 +234,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 12,
     paddingHorizontal: 16, paddingVertical: 13,
     borderBottomWidth: 1,
+    backgroundColor: 'transparent',
   },
   menuIcon: { width: 32, height: 32, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
   menuLabel: { flex: 1, fontSize: 13, fontWeight: '600' },

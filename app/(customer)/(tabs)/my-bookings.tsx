@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   gradient: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   errorText: { marginBottom: 12 },
-  list: { flex: 1 },
+  list: { flex: 1, backgroundColor: 'transparent' },
   listContent: { padding: 16 },
   heading: { fontSize: 22, fontWeight: '700', marginBottom: 16 },
   empty: { textAlign: 'center', marginTop: 32, fontSize: 15 },
