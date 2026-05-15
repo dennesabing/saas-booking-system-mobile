@@ -42,6 +42,9 @@ export function useUploadAvatar() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') throw new Error('Photo library permission denied');
+
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -54,9 +57,31 @@ export function useUploadAvatar() {
       const formData = new FormData();
       formData.append('avatar', { uri: asset.uri, name: 'avatar.jpg', type: 'image/jpeg' } as any);
 
-      const { data: res } = await api.post('/api/v1/me/avatar', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      // Use native fetch — Axios's default Content-Type: application/json header
+      // clobbers the multipart boundary that React Native generates for FormData.
+      const { getToken } = await import('../lib/token');
+      const token = await getToken();
+      const baseUrl = process.env.EXPO_PUBLIC_API_URL ?? '';
+
+      const response = await fetch(`${baseUrl}/api/v1/me/avatar`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+        body: formData,
       });
+
+      const text = await response.text();
+      console.log('[avatar] status', response.status, 'body', text.slice(0, 300));
+
+      if (!response.ok) {
+        let err: any = {};
+        try { err = JSON.parse(text); } catch { err = { message: text }; }
+        throw Object.assign(new Error('Upload failed'), { response: { data: err, status: response.status } });
+      }
+
+      const res = JSON.parse(text);
       return res.data ?? res;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['me'] }),

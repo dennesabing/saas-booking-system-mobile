@@ -32,6 +32,12 @@
         {
           "locationWhenInUsePermission": "Allow Koobstel to access your location to set your default location."
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Koobstel to access your photos to set your profile picture."
+        }
       ]
     ],
     "experiments": {
