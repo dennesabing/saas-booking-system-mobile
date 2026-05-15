@@ -1,0 +1,285 @@
+<h2>Full Design — Sky Frost iOS Theme</h2>
+<p class="subtitle">Light and dark modes side by side. Scroll down to see all sections. Click to approve.</p>
+
+<div class="split" style="margin-bottom: 32px;">
+
+  <!-- LIGHT MODE -->
+  <div class="mockup">
+    <div class="mockup-header">☀️ Light Mode</div>
+    <div class="mockup-body" style="padding:0; overflow:hidden;">
+      <div style="background:linear-gradient(160deg,#f0f9ff 0%,#e0f2fe 50%,#ecfdf5 100%); padding:14px 12px 0; font-family:-apple-system,BlinkMacSystemFont,sans-serif; min-height:560px; position:relative;">
+        <!-- Status bar -->
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#374151;margin-bottom:10px;font-weight:600;padding:0 4px;"><span>9:41</span><span>▌▌▌ 100%</span></div>
+
+        <!-- Profile header card -->
+        <div style="background:rgba(255,255,255,0.65);backdrop-filter:blur(20px);border-radius:20px;padding:16px;border:1px solid rgba(255,255,255,0.85);margin-bottom:10px;box-shadow:0 4px 20px rgba(14,165,233,0.08);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <span style="font-size:13px;font-weight:700;color:#0f172a;">My Profile</span>
+            <!-- iOS switch row -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:#64748b;">🌙</span>
+              <div style="width:38px;height:22px;background:#d1d5db;border-radius:11px;position:relative;">
+                <div style="width:18px;height:18px;background:white;border-radius:9px;position:absolute;left:2px;top:2px;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:52px;height:52px;border-radius:26px;background:linear-gradient(135deg,#0ea5e9,#6366f1);box-shadow:0 4px 12px rgba(14,165,233,0.3);"></div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:#0f172a;">John Doe</div>
+              <div style="font-size:11px;color:#64748b;margin-top:1px;">john@example.com</div>
+            </div>
+            <div style="background:rgba(14,165,233,0.1);border:1px solid rgba(14,165,233,0.2);border-radius:10px;padding:5px 10px;">
+              <span style="font-size:11px;font-weight:700;color:#0ea5e9;">Edit</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+          <div style="background:rgba(255,255,255,0.6);border-radius:16px;padding:12px;border:1px solid rgba(255,255,255,0.85);text-align:center;box-shadow:0 2px 10px rgba(14,165,233,0.06);">
+            <div style="font-size:20px;font-weight:800;color:#0f172a;">12</div>
+            <div style="font-size:9px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">Bookings</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.6);border-radius:16px;padding:12px;border:1px solid rgba(255,255,255,0.85);text-align:center;box-shadow:0 2px 10px rgba(14,165,233,0.06);">
+            <div style="font-size:20px;font-weight:800;color:#0f172a;">4</div>
+            <div style="font-size:9px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">Reviews</div>
+          </div>
+        </div>
+
+        <!-- Menu group -->
+        <div style="background:rgba(255,255,255,0.6);border-radius:16px;border:1px solid rgba(255,255,255,0.85);overflow:hidden;margin-bottom:10px;box-shadow:0 2px 10px rgba(14,165,233,0.06);">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(14,165,233,0.07);">
+            <div style="width:30px;height:30px;border-radius:9px;background:rgba(14,165,233,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;">💳</div>
+            <span style="flex:1;font-size:13px;font-weight:600;color:#0f172a;">Payment Methods</span>
+            <span style="font-size:12px;color:#94a3b8;">Coming soon</span>
+            <span style="color:#cbd5e1;">›</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;">
+            <div style="width:30px;height:30px;border-radius:9px;background:rgba(14,165,233,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;">🔔</div>
+            <span style="flex:1;font-size:13px;font-weight:600;color:#0f172a;">Notifications</span>
+            <span style="color:#cbd5e1;">›</span>
+          </div>
+        </div>
+
+        <!-- Sign out -->
+        <div style="background:rgba(255,255,255,0.6);border-radius:16px;border:1px solid rgba(255,255,255,0.85);overflow:hidden;box-shadow:0 2px 10px rgba(14,165,233,0.06);">
+          <div style="padding:13px 14px;text-align:center;">
+            <span style="font-size:13px;font-weight:700;color:#ef4444;">Sign Out</span>
+          </div>
+        </div>
+
+        <!-- Tab bar -->
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(240,249,255,0.8);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.7);display:flex;justify-content:space-around;padding:8px 0 6px;">
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span style="font-size:9px;color:#94a3b8;font-weight:600;">Bookings</span>
+          </div>
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#0ea5e9" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span style="font-size:9px;color:#0ea5e9;font-weight:700;">Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DARK MODE -->
+  <div class="mockup">
+    <div class="mockup-header">🌙 Dark Mode</div>
+    <div class="mockup-body" style="padding:0; overflow:hidden;">
+      <div style="background:linear-gradient(160deg,#060d1a 0%,#0c1730 50%,#0a1628 100%); padding:14px 12px 0; font-family:-apple-system,BlinkMacSystemFont,sans-serif; min-height:560px; position:relative;">
+        <!-- Status bar -->
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-bottom:10px;font-weight:600;padding:0 4px;"><span>9:41</span><span>▌▌▌ 100%</span></div>
+
+        <!-- Profile header card -->
+        <div style="background:rgba(255,255,255,0.06);backdrop-filter:blur(20px);border-radius:20px;padding:16px;border:1px solid rgba(255,255,255,0.1);margin-bottom:10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <span style="font-size:13px;font-weight:700;color:#f1f5f9;">My Profile</span>
+            <!-- iOS switch ON in dark mode -->
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:#64748b;">🌙</span>
+              <div style="width:38px;height:22px;background:#0ea5e9;border-radius:11px;position:relative;">
+                <div style="width:18px;height:18px;background:white;border-radius:9px;position:absolute;right:2px;top:2px;box-shadow:0 1px 4px rgba(0,0,0,0.4);"></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:52px;height:52px;border-radius:26px;background:linear-gradient(135deg,#0ea5e9,#6366f1);box-shadow:0 4px 12px rgba(14,165,233,0.2);"></div>
+            <div style="flex:1;">
+              <div style="font-size:15px;font-weight:700;color:#f1f5f9;">John Doe</div>
+              <div style="font-size:11px;color:#64748b;margin-top:1px;">john@example.com</div>
+            </div>
+            <div style="background:rgba(14,165,233,0.15);border:1px solid rgba(14,165,233,0.25);border-radius:10px;padding:5px 10px;">
+              <span style="font-size:11px;font-weight:700;color:#38bdf8;">Edit</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+          <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:12px;border:1px solid rgba(255,255,255,0.08);text-align:center;">
+            <div style="font-size:20px;font-weight:800;color:#f1f5f9;">12</div>
+            <div style="font-size:9px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">Bookings</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05);border-radius:16px;padding:12px;border:1px solid rgba(255,255,255,0.08);text-align:center;">
+            <div style="font-size:20px;font-weight:800;color:#f1f5f9;">4</div>
+            <div style="font-size:9px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;">Reviews</div>
+          </div>
+        </div>
+
+        <!-- Menu group -->
+        <div style="background:rgba(255,255,255,0.05);border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.06);">
+            <div style="width:30px;height:30px;border-radius:9px;background:rgba(14,165,233,0.12);display:flex;align-items:center;justify-content:center;font-size:14px;">💳</div>
+            <span style="flex:1;font-size:13px;font-weight:600;color:#f1f5f9;">Payment Methods</span>
+            <span style="font-size:12px;color:#475569;">Coming soon</span>
+            <span style="color:#334155;">›</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;">
+            <div style="width:30px;height:30px;border-radius:9px;background:rgba(14,165,233,0.12);display:flex;align-items:center;justify-content:center;font-size:14px;">🔔</div>
+            <span style="flex:1;font-size:13px;font-weight:600;color:#f1f5f9;">Notifications</span>
+            <span style="color:#334155;">›</span>
+          </div>
+        </div>
+
+        <!-- Sign out -->
+        <div style="background:rgba(255,255,255,0.05);border-radius:16px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;">
+          <div style="padding:13px 14px;text-align:center;">
+            <span style="font-size:13px;font-weight:700;color:#f87171;">Sign Out</span>
+          </div>
+        </div>
+
+        <!-- Tab bar -->
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(6,13,26,0.85);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-around;padding:8px 0 6px;">
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span style="font-size:9px;color:#475569;font-weight:600;">Bookings</span>
+          </div>
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#38bdf8" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span style="font-size:9px;color:#38bdf8;font-weight:700;">Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bookings screen preview -->
+<h3 style="margin-bottom:8px;">Bookings screen</h3>
+<p class="subtitle" style="margin-bottom:16px;">Same frosted glass treatment on the bookings list</p>
+
+<div class="split">
+  <!-- Bookings Light -->
+  <div class="mockup">
+    <div class="mockup-header">☀️ Bookings — Light</div>
+    <div class="mockup-body" style="padding:0; overflow:hidden;">
+      <div style="background:linear-gradient(160deg,#f0f9ff,#e0f2fe,#ecfdf5); padding:14px 12px 60px; font-family:-apple-system,sans-serif; min-height:360px; position:relative;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#374151;margin-bottom:12px;font-weight:600;padding:0 4px;"><span>9:41</span><span>▌▌▌</span></div>
+        <div style="font-size:18px;font-weight:800;color:#0f172a;margin-bottom:12px;padding:0 4px;">My Bookings</div>
+
+        <div style="background:rgba(255,255,255,0.65);border-radius:16px;padding:14px;border:1px solid rgba(255,255,255,0.85);margin-bottom:8px;box-shadow:0 2px 10px rgba(14,165,233,0.06);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:700;color:#0f172a;">Deep Tissue Massage</span>
+            <span style="background:#dcfce7;color:#16a34a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">confirmed</span>
+          </div>
+          <div style="font-size:11px;color:#64748b;">May 20, 2:00 PM</div>
+          <div style="font-size:10px;color:#94a3b8;">#BK-00124</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.65);border-radius:16px;padding:14px;border:1px solid rgba(255,255,255,0.85);box-shadow:0 2px 10px rgba(14,165,233,0.06);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:700;color:#0f172a;">Hair Cut & Style</span>
+            <span style="background:#fef9c3;color:#ca8a04;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">pending</span>
+          </div>
+          <div style="font-size:11px;color:#64748b;">May 22, 10:00 AM</div>
+          <div style="font-size:10px;color:#94a3b8;">#BK-00125</div>
+        </div>
+
+        <!-- Tab bar -->
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(240,249,255,0.8);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.7);display:flex;justify-content:space-around;padding:8px 0 6px;">
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#0ea5e9" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r="1" fill="white"/><circle cx="12" cy="14" r="1" fill="white"/></svg>
+            <span style="font-size:9px;color:#0ea5e9;font-weight:700;">Bookings</span>
+          </div>
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span style="font-size:9px;color:#94a3b8;font-weight:600;">Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookings Dark -->
+  <div class="mockup">
+    <div class="mockup-header">🌙 Bookings — Dark</div>
+    <div class="mockup-body" style="padding:0; overflow:hidden;">
+      <div style="background:linear-gradient(160deg,#060d1a,#0c1730,#0a1628); padding:14px 12px 60px; font-family:-apple-system,sans-serif; min-height:360px; position:relative;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-bottom:12px;font-weight:600;padding:0 4px;"><span>9:41</span><span>▌▌▌</span></div>
+        <div style="font-size:18px;font-weight:800;color:#f1f5f9;margin-bottom:12px;padding:0 4px;">My Bookings</div>
+
+        <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:14px;border:1px solid rgba(255,255,255,0.08);margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:700;color:#f1f5f9;">Deep Tissue Massage</span>
+            <span style="background:rgba(22,163,74,0.15);color:#4ade80;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">confirmed</span>
+          </div>
+          <div style="font-size:11px;color:#64748b;">May 20, 2:00 PM</div>
+          <div style="font-size:10px;color:#334155;">#BK-00124</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:14px;border:1px solid rgba(255,255,255,0.08);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <span style="font-size:13px;font-weight:700;color:#f1f5f9;">Hair Cut & Style</span>
+            <span style="background:rgba(202,138,4,0.15);color:#fbbf24;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">pending</span>
+          </div>
+          <div style="font-size:11px;color:#64748b;">May 22, 10:00 AM</div>
+          <div style="font-size:10px;color:#334155;">#BK-00125</div>
+        </div>
+
+        <!-- Tab bar -->
+        <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(6,13,26,0.85);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-around;padding:8px 0 6px;">
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#38bdf8" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="14" r="1" fill="#060d1a"/><circle cx="12" cy="14" r="1" fill="#060d1a"/></svg>
+            <span style="font-size:9px;color:#38bdf8;font-weight:700;">Bookings</span>
+          </div>
+          <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="1.8" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span style="font-size:9px;color:#475569;font-weight:600;">Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:28px; background:rgba(14,165,233,0.06); border:1px solid rgba(14,165,233,0.15); border-radius:14px; padding:18px; font-family:-apple-system,sans-serif;">
+  <h3 style="margin:0 0 10px; font-size:14px;">Design summary</h3>
+  <ul style="margin:0; padding-left:18px; font-size:13px; color:#374151; line-height:1.8;">
+    <li><strong>Background:</strong> Sky-to-mint gradient (light) / deep navy gradient (dark)</li>
+    <li><strong>Cards & surfaces:</strong> rgba(255,255,255,0.6) frosted glass (light) / rgba(255,255,255,0.06) dark glass</li>
+    <li><strong>Accent:</strong> Sky blue <code style="background:#e0f2fe;padding:1px 5px;border-radius:4px;">#0ea5e9</code> (light) / <code style="background:#0c4a6e;color:#e0f2fe;padding:1px 5px;border-radius:4px;">#38bdf8</code> (dark)</li>
+    <li><strong>Tab icons:</strong> Calendar (Bookings) + Person (Profile) — outlined inactive, filled active</li>
+    <li><strong>Theme switcher:</strong> 🌙 label + iOS-style toggle in Profile header card</li>
+    <li><strong>Theme context:</strong> ThemeContext with tokens, persisted to expo-secure-store</li>
+  </ul>
+</div>
+
+<div class="options" style="margin-top:20px;">
+  <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Approve design — proceed to implementation plan</h3>
+      <p>Write the spec doc and move to writing-plans</p>
+    </div>
+  </div>
+  <div class="option" data-choice="revise" onclick="toggleSelect(this)">
+    <div class="letter">↺</div>
+    <div class="content">
+      <h3>Request changes</h3>
+      <p>Tell me what to adjust in the terminal</p>
+    </div>
+  </div>
+</div>
