@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -12,14 +13,31 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import UpgradeCtaCard from '../../../../components/upgrade/UpgradeCtaCard';
 import { useTheme } from '../../../../contexts/ThemeContext';
 import { useLogout } from '../../../../hooks/useAuth';
+import { resolvePaymentMode } from '../../../../hooks/usePaymentMode';
 import { useProfile } from '../../../../hooks/useProfile';
+import { useOffer, useRestore } from '../../../../hooks/useProOwnerUpgrade';
 
 export default function ProfileHomeScreen() {
   const { data: user, isLoading } = useProfile();
   const logout = useLogout();
   const { theme, tokens, toggleTheme } = useTheme();
+  const { data: offer } = useOffer();
+  const restore = useRestore();
+
+  async function handleRestore(): Promise<void> {
+    if (!offer) return;
+    try {
+      const mode = resolvePaymentMode(offer.payment_mode);
+      await mode.initialize(offer.payment_config);
+      const r = await mode.restore?.();
+      if (!r?.restored) { Alert.alert('No purchases to restore.'); return; }
+      await restore.mutateAsync({ platform: r.platform!, receipt: r.receipt! });
+      Alert.alert('Purchases restored successfully.');
+    } catch (e: any) { Alert.alert('Restore failed', e?.message ?? ''); }
+  }
 
   if (isLoading) {
     return (
@@ -83,6 +101,9 @@ export default function ProfileHomeScreen() {
             </View>
           </View>
 
+          {/* Upgrade CTA */}
+          <UpgradeCtaCard currentOrganizationId={user?.current_organization_id ?? null} />
+
           {/* Stats strip */}
           <View style={styles.statsRow}>
             <View style={[styles.statCard, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
@@ -132,6 +153,29 @@ export default function ProfileHomeScreen() {
               <Text style={[styles.menuChevron, { color: tokens.textMuted }]}>›</Text>
             </TouchableOpacity>
           </View>
+
+          {/* Restore Purchases */}
+          {offer?.payment_config.restore_supported && (
+            <View style={[styles.menuGroup, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
+              <TouchableOpacity
+                style={[styles.menuItem, { borderBottomColor: 'transparent' }]}
+                onPress={handleRestore}
+                disabled={restore.isPending}
+              >
+                {restore.isPending ? (
+                  <ActivityIndicator color={tokens.accent} style={{ flex: 1 }} />
+                ) : (
+                  <>
+                    <View style={[styles.menuIcon, iconBg]}>
+                      <Text>♻️</Text>
+                    </View>
+                    <Text style={[styles.menuLabel, { color: tokens.textPrimary }]}>Restore Purchases</Text>
+                    <Text style={[styles.menuChevron, { color: tokens.textMuted }]}>›</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
 
           {/* Sign out */}
           <View style={[styles.menuGroup, { backgroundColor: tokens.surface, borderColor: tokens.surfaceBorder, ...tokens.cardShadow }]}>
