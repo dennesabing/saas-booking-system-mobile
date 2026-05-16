@@ -1,0 +1,22 @@
+appId: com.universalbook.app
+---
+- launchApp
+- tapOn: 'Email'
+- inputText: 'free.user@example.com'
+- tapOn: 'Password'
+- inputText: 'password'
+- tapOn: 'Sign in'
+- assertVisible: 'My Bookings'
+- assertVisible: 'BECOME A PRO OWNER'
+- tapOn: 'Learn more'
+- assertVisible: 'Pro Owner'
+- tapOn: 'Continue'
+- tapOn:
+    id: 'org-name-input'
+- inputText: "Maria's Business"
+- tapOn: 'Continue'
+- assertVisible: "Maria's Business"
+- tapOn: 'Start Free Trial'
+- assertVisible: "You're a Pro Owner."
+- tapOn: 'Go to dashboard'
+- assertVisible: 'Bookings'
