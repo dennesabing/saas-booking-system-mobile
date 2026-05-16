@@ -13,7 +13,9 @@ import {
 } from 'react-native';
 import ActionButton from '../../../components/ActionButton';
 import StatusBadge from '../../../components/StatusBadge';
+import UpgradeCtaCard from '../../../components/upgrade/UpgradeCtaCard';
 import { useTheme } from '../../../contexts/ThemeContext';
+import { useCurrentUser } from '../../../hooks/useAuth';
 import { useCancelMyBooking, useMyBookings } from '../../../hooks/useMyBookings';
 
 const TERMINAL = ['completed', 'cancelled', 'no_show', 'pending_payment'];
@@ -31,6 +33,7 @@ export default function MyBookingsScreen() {
   const { data: bookings, isLoading, isError, refetch } = useMyBookings();
   const cancel = useCancelMyBooking();
   const { tokens } = useTheme();
+  const { data: currentUser } = useCurrentUser();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
 
@@ -90,7 +93,10 @@ export default function MyBookingsScreen() {
           />
         }
         ListHeaderComponent={
-          <Text style={[styles.heading, { color: tokens.textPrimary }]}>My Bookings</Text>
+          <>
+            <UpgradeCtaCard currentOrganizationId={currentUser?.current_organization_id ?? null} />
+            <Text style={[styles.heading, { color: tokens.textPrimary }]}>My Bookings</Text>
+          </>
         }
         ListEmptyComponent={
           <Text style={[styles.empty, { color: tokens.textMuted }]}>
