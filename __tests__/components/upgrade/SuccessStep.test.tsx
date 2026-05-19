@@ -13,13 +13,13 @@ describe('SuccessStep', () => {
   beforeEach(() => jest.resetAllMocks());
 
   it('renders primary CTA "Set up your first service"', () => {
-    const { getByText } = render(<SuccessStep orgName="Maria's Business" />);
-    expect(getByText(/Set up your first service/i)).toBeTruthy();
+    const { getAllByText } = render(<SuccessStep orgName="Maria's Business" />);
+    expect(getAllByText(/Set up your first service/i).length).toBeGreaterThan(0);
   });
 
   it('primary CTA navigates to setup modal', () => {
-    const { getByText } = render(<SuccessStep orgName="Maria's Business" />);
-    fireEvent.press(getByText(/Set up your first service/i));
+    const { getByRole } = render(<SuccessStep orgName="Maria's Business" />);
+    fireEvent.press(getByRole('button', { name: /Set up your first service/i }));
     expect(router.push).toHaveBeenCalledWith('/(staff)/setup/first-service');
   });
 

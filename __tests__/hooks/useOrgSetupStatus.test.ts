@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react-native';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { useOrgSetupStatus } from '../../hooks/useOrgSetupStatus';
 import { TestWrapper } from '../test-utils';
 
@@ -35,5 +35,18 @@ describe('useOrgSetupStatus', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data?.setup_completed_at).toBe('2026-05-19T10:00:00Z');
+  });
+
+  it('useMarkBookingLinkShared calls PATCH and invalidates org-setup-status', async () => {
+    mockApi.patch.mockResolvedValue({ data: { booking_link_shared: true } });
+
+    // Import the mutation hook
+    const { useMarkBookingLinkShared } = require('../../hooks/useOrgSetupStatus');
+    const { result } = renderHook(() => useMarkBookingLinkShared(), { wrapper: TestWrapper });
+
+    act(() => { result.current.mutate(); });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(mockApi.patch).toHaveBeenCalledWith('/api/v1/org/setup-status', { booking_link_shared: true });
   });
 });

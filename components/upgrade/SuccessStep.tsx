@@ -20,7 +20,7 @@ export default function SuccessStep({ orgName }: { orgName: string }) {
     <View style={styles.container}>
       <View style={styles.check}><Text style={styles.checkMark}>✓</Text></View>
       <Text style={styles.title}>You're a Pro Owner.</Text>
-      <Text style={styles.sub}>Welcome to {orgName}.{'\n'}Let's get you started.</Text>
+      <Text style={styles.sub}>Welcome to {orgName}.{'\n'}Let's set up your first service.</Text>
       <Pressable accessibilityRole="button" onPress={goToSetup} style={styles.cta}>
         <Text style={styles.ctaText}>Set up your first service →</Text>
       </Pressable>
