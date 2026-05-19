@@ -44,7 +44,7 @@ export default function StaffBookablesScreen() {
 
   return (
     <LinearGradient colors={tokens.bg} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.gradient}>
-      <SafeAreaView style={styles.safe} edges={['top']}>
+      <SafeAreaView style={styles.safe} edges={[]}>
         <FlatList
           contentContainerStyle={styles.list}
           data={bookables}
