@@ -8,15 +8,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
 } from 'react-native';
-import { isStaff, useCurrentUser, useLogin } from '../../hooks/useAuth';
+import api from '../../lib/api';
+import { isStaff, MeUser, useLogin } from '../../hooks/useAuth';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const login = useLogin();
-  const { data: user } = useCurrentUser();
   const params = useLocalSearchParams<{ returnTo?: string }>();
 
   const handleLogin = async () => {
@@ -25,7 +24,11 @@ export default function LoginScreen() {
       const dest = params.returnTo ?? undefined;
       if (dest) {
         router.replace(dest as any);
-      } else if (user && isStaff(user)) {
+        return;
+      }
+      const { data: meRes } = await api.get('/api/v1/me');
+      const freshUser: MeUser = meRes.data ?? meRes;
+      if (isStaff(freshUser)) {
         router.replace('/(staff)/(tabs)/bookings');
       } else {
         router.replace('/(customer)/(tabs)/my-bookings');

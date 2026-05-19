@@ -1,0 +1,16 @@
+appId: com.universalbook.app
+---
+- launchApp
+- tapOn: 'Email'
+- inputText: 'freshowner2@example.com'
+- tapOn: 'Password'
+- inputText: 'password'
+- tapOn: 'Sign in'
+# Arrives at SuccessStep
+- assertVisible: "You're a Pro Owner."
+- tapOn: 'Go to dashboard'
+# Arrives on staff bookings tab with nothing set up
+- assertVisible: 'Get ready to accept bookings'
+- assertVisible: '0 of 4'
+- assertVisible: 'No bookings yet'
+- assertVisible: 'Add a service'

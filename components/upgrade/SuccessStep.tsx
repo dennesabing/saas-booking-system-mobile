@@ -5,17 +5,27 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function SuccessStep({ orgName }: { orgName: string }) {
   const qc = useQueryClient();
-  function go() {
+
+  function goToSetup() {
+    qc.invalidateQueries({ queryKey: ['me'] });
+    router.push('/(staff)/setup/first-service');
+  }
+
+  function goToDashboard() {
     qc.invalidateQueries({ queryKey: ['me'] });
     router.replace('/(staff)/(tabs)/bookings');
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.check}><Text style={styles.checkMark}>✓</Text></View>
       <Text style={styles.title}>You're a Pro Owner.</Text>
-      <Text style={styles.sub}>Welcome to {orgName}.{"\n"}Let's set up your first service.</Text>
-      <Pressable accessibilityRole="button" onPress={go} style={styles.cta}>
-        <Text style={styles.ctaText}>Go to dashboard</Text>
+      <Text style={styles.sub}>Welcome to {orgName}.{'\n'}Let's set up your first service.</Text>
+      <Pressable accessibilityRole="button" onPress={goToSetup} style={styles.cta}>
+        <Text style={styles.ctaText}>Set up your first service →</Text>
+      </Pressable>
+      <Pressable accessibilityRole="button" onPress={goToDashboard} style={styles.skip}>
+        <Text style={styles.skipText}>Go to dashboard</Text>
       </Pressable>
     </View>
   );
@@ -29,4 +39,6 @@ const styles = StyleSheet.create({
   sub:       { textAlign: 'center', marginTop: 12, color: '#555' },
   cta:       { backgroundColor: '#5B6CFF', borderRadius: 12, paddingVertical: 14, alignItems: 'center', alignSelf: 'stretch', marginTop: 'auto' },
   ctaText:   { color: 'white', fontWeight: '700', fontSize: 16 },
+  skip:      { marginTop: 16, alignItems: 'center' },
+  skipText:  { color: '#6b7280', fontSize: 14 },
 });
