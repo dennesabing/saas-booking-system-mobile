@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import { PaymentMode, PurchaseArgs, PurchaseResult, RestoreResult } from './types';
 
-type IapConfig = { ios_sku: string; android_sku: string };
+type IapConfig = { ios_sku?: string | null; android_sku?: string | null };
 
 export class IapCancelError extends Error { name = 'IapCancelError'; }
 
@@ -13,7 +13,7 @@ export class IapPaymentMode implements PaymentMode {
   async initialize(config: unknown): Promise<void> {
     const cfg = config as IapConfig;
     await RNIap.initConnection();
-    this.sku = Platform.OS === 'ios' ? cfg.ios_sku : cfg.android_sku;
+    this.sku = (Platform.OS === 'ios' ? cfg.ios_sku : cfg.android_sku) ?? '__stub__';
     await RNIap.getSubscriptions({ skus: [this.sku] });
   }
 
