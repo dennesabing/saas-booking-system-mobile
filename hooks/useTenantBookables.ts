@@ -64,7 +64,9 @@ export function useDeleteBookable(uuid: string) {
       await api.delete(`/api/v1/bookables/${uuid}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tenant-bookables'] });
+      queryClient.setQueryData<TenantBookable[]>(['tenant-bookables'], (old) =>
+        old?.filter((b) => b.id !== uuid) ?? []
+      );
       queryClient.invalidateQueries({ queryKey: ['org-setup-status'] });
     },
   });
