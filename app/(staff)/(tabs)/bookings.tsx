@@ -1,8 +1,10 @@
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Pressable,
   RefreshControl,
   StyleSheet,
   Text,
@@ -11,8 +13,10 @@ import {
 } from 'react-native';
 import ActionButton from '../../../components/ActionButton';
 import StatusBadge from '../../../components/StatusBadge';
+import { SetupChecklist } from '../../../components/setup/SetupChecklist';
 import { useBookingAction } from '../../../hooks/useBookingActions';
 import { useTenantBookings } from '../../../hooks/useTenantBookings';
+import { useOrgSetupStatus } from '../../../hooks/useOrgSetupStatus';
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString([], {
@@ -87,6 +91,8 @@ function BookingActions({ uuid, status }: { uuid: string; status: string }) {
 export default function StaffBookingsScreen() {
   const { data: bookings, isLoading, isRefetching, isError, refetch } = useTenantBookings();
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const { data: setupStatus } = useOrgSetupStatus();
+  const hasBookable = setupStatus?.items?.has_bookable ?? true;
 
   if (isLoading) {
     return (
@@ -113,8 +119,31 @@ export default function StaffBookingsScreen() {
       data={bookings}
       keyExtractor={(b) => b.uuid}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-      ListHeaderComponent={<Text style={styles.heading}>Bookings</Text>}
-      ListEmptyComponent={<Text style={styles.empty}>No bookings.</Text>}
+      ListHeaderComponent={
+        <>
+          <SetupChecklist />
+          <Text style={styles.heading}>Bookings</Text>
+        </>
+      }
+      ListEmptyComponent={
+        hasBookable ? (
+          <Text style={styles.empty}>No bookings.</Text>
+        ) : (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyIcon}>📋</Text>
+            <Text style={styles.emptyTitle}>No bookings yet</Text>
+            <Text style={styles.emptyBody}>
+              Add your first service so customers can start booking with you.
+            </Text>
+            <Pressable
+              onPress={() => router.push('/(staff)/setup/first-service')}
+              style={styles.emptyCta}
+            >
+              <Text style={styles.emptyCtaText}>Add a service</Text>
+            </Pressable>
+          </View>
+        )
+      }
       renderItem={({ item }) => {
         const expanded = expandedId === item.uuid;
         return (
@@ -165,4 +194,11 @@ const styles = StyleSheet.create({
   cardCode: { color: '#9ca3af', fontSize: 12 },
   expanded: { marginTop: 12, borderTopWidth: 1, borderTopColor: '#f3f4f6', paddingTop: 12 },
   notes: { color: '#374151', fontSize: 14, marginBottom: 8 },
+  emptyState:   { alignItems: 'center', paddingHorizontal: 32, paddingTop: 48 },
+  emptyIcon:    { fontSize: 40, marginBottom: 12 },
+  emptyTitle:   { fontSize: 18, fontWeight: '700', color: '#111', marginBottom: 8 },
+  emptyBody:    { textAlign: 'center', color: '#6b7280', fontSize: 14, lineHeight: 20, marginBottom: 20 },
+  emptyCta:     { backgroundColor: '#5B6CFF', borderRadius: 12, paddingVertical: 12,
+                  paddingHorizontal: 24, alignItems: 'center' },
+  emptyCtaText: { color: 'white', fontWeight: '700', fontSize: 15 },
 });
