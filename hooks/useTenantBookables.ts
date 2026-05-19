@@ -2,8 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
 
 export type TenantBookable = {
-  id: string;
-  uuid: string;
+  id: string; // UUID — BookableResource returns 'id' => $this->uuid
   name: string;
   description: string | null;
   kind: 'slot' | 'resource';
@@ -27,7 +26,7 @@ export function useToggleBookable() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ uuid, isActive }: { uuid: string; isActive: boolean }) => {
-      const { data } = await api.patch(`/api/v1/bookables/${uuid}`, { is_active: isActive });
+      const { data } = await api.patch(`/api/v1/bookables/${uuid}`, { is_active: isActive }); // uuid is item.id
       return data.data ?? data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tenant-bookables'] }),

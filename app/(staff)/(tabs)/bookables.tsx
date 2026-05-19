@@ -40,7 +40,7 @@ export default function StaffBookablesScreen() {
     <FlatList
       contentContainerStyle={styles.list}
       data={bookables}
-      keyExtractor={(b) => b.uuid}
+      keyExtractor={(b) => b.id}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       ListHeaderComponent={
         <Pressable
@@ -54,7 +54,7 @@ export default function StaffBookablesScreen() {
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.card}
-          onPress={() => router.push(`/(staff)/bookables/${item.uuid}`)}
+          onPress={() => router.push(`/(staff)/bookables/${item.id}`)}
         >
           <View style={styles.cardRow}>
             <View style={{ flex: 1 }}>
@@ -65,7 +65,7 @@ export default function StaffBookablesScreen() {
             </View>
             <Switch
               value={item.is_active}
-              onValueChange={(val) => toggle.mutate({ uuid: item.uuid, isActive: val })}
+              onValueChange={(val) => toggle.mutate({ uuid: item.id, isActive: val })}
               trackColor={{ false: '#d1d5db', true: '#2563eb' }}
             />
           </View>

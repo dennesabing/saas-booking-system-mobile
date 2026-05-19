@@ -14,7 +14,6 @@ import {
   View,
 } from 'react-native';
 import {
-  TenantBookable,
   useDeleteBookable,
   useUpdateBookable,
   useTenantBookables,
@@ -25,7 +24,7 @@ const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120];
 export default function BookableDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: bookables, isLoading } = useTenantBookables();
-  const bookable = bookables?.find((b) => b.uuid === id);
+  const bookable = bookables?.find((b) => b.id === id);
 
   const [name, setName]               = useState('');
   const [description, setDescription] = useState('');
