@@ -80,7 +80,10 @@ export default function BookableDetailScreen() {
     if (!isFree && isNaN(priceInCents)) { Alert.alert('Validation', 'Enter a valid price.'); return; }
     update.mutate(
       { name: name.trim(), description: description.trim() || undefined, duration_minutes: duration, price: priceInCents, is_active: isActive },
-      { onSuccess: () => router.back() }
+      {
+        onSuccess: () => router.back(),
+        onError: (e: any) => Alert.alert('Save failed', e?.response?.data?.message ?? 'Please try again.'),
+      }
     );
   };
 
@@ -90,7 +93,14 @@ export default function BookableDetailScreen() {
       `Delete "${bookable.name}"? This cannot be undone.`,
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => remove.mutate(undefined, { onSuccess: () => router.back() }) },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => remove.mutate(undefined, {
+            onSuccess: () => router.back(),
+            onError: (e: any) => Alert.alert('Delete failed', e?.response?.data?.message ?? 'Please try again.'),
+          }),
+        },
       ]
     );
   };
