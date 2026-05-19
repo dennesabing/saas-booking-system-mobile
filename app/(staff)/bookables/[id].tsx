@@ -185,6 +185,13 @@ export default function BookableDetailScreen() {
             </Pressable>
 
             <Pressable
+              style={[styles.createBookingBtn, { borderColor: tokens.accent }]}
+              onPress={() => router.push(`/(staff)/bookables/${id}/create-booking`)}
+            >
+              <Text style={[styles.createBookingBtnText, { color: tokens.accent }]}>+ Create Booking</Text>
+            </Pressable>
+
+            <Pressable
               style={[styles.deleteBtn, { borderColor: '#dc2626' }, remove.isPending && styles.btnDisabled]}
               onPress={handleDelete}
               disabled={remove.isPending}
@@ -221,4 +228,6 @@ const styles = StyleSheet.create({
   deleteBtn:     { borderRadius: 14, paddingVertical: 15, alignItems: 'center', borderWidth: 1 },
   deleteBtnText: { color: '#dc2626', fontWeight: '700', fontSize: 16 },
   btnDisabled:   { opacity: 0.5 },
+  createBookingBtn:     { borderRadius: 14, paddingVertical: 15, alignItems: 'center', marginBottom: 12, borderWidth: 1 },
+  createBookingBtnText: { fontWeight: '700', fontSize: 16 },
 });
