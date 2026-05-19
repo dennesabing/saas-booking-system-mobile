@@ -1,7 +1,9 @@
+import { router } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Pressable,
   RefreshControl,
   StyleSheet,
   Switch,
@@ -41,19 +43,24 @@ export default function StaffBookablesScreen() {
       keyExtractor={(b) => b.uuid}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
       ListHeaderComponent={
-        <View style={styles.headerRow}>
-          <Text style={styles.heading}>Bookables</Text>
-          <Text style={styles.subheading}>Manage from the web portal</Text>
-        </View>
+        <Pressable
+          style={styles.addBtn}
+          onPress={() => router.push('/(staff)/setup/first-service')}
+        >
+          <Text style={styles.addBtnText}>+ Add service</Text>
+        </Pressable>
       }
       ListEmptyComponent={<Text style={styles.empty}>No bookables found.</Text>}
       renderItem={({ item }) => (
-        <View style={styles.card}>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => router.push(`/(staff)/bookables/${item.uuid}`)}
+        >
           <View style={styles.cardRow}>
             <View style={{ flex: 1 }}>
               <Text style={styles.cardName}>{item.name}</Text>
               <Text style={styles.cardMeta}>
-                {item.kind} · {(item.price / 100).toFixed(2)} {item.currency}
+                {item.duration_minutes} min · {item.price === 0 ? 'Free' : `${(item.price / 100).toFixed(2)} ${item.currency}`}
               </Text>
             </View>
             <Switch
@@ -62,19 +69,20 @@ export default function StaffBookablesScreen() {
               trackColor={{ false: '#d1d5db', true: '#2563eb' }}
             />
           </View>
-        </View>
+          <Text style={styles.chevron}>›</Text>
+        </TouchableOpacity>
       )}
     />
   );
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  list: { padding: 16 },
-  headerRow: { marginBottom: 16 },
-  heading: { fontSize: 22, fontWeight: '700', color: '#111' },
-  subheading: { color: '#9ca3af', fontSize: 13, marginTop: 2 },
-  empty: { color: '#9ca3af', textAlign: 'center', marginTop: 32 },
+  center:      { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  list:        { padding: 16 },
+  addBtn:      { backgroundColor: '#5B6CFF', borderRadius: 10, paddingVertical: 12,
+                 alignItems: 'center', marginBottom: 16 },
+  addBtnText:  { color: '#fff', fontWeight: '700', fontSize: 15 },
+  empty:       { color: '#9ca3af', textAlign: 'center', marginTop: 32 },
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -85,7 +93,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  cardRow: { flexDirection: 'row', alignItems: 'center' },
-  cardName: { fontSize: 16, fontWeight: '600', color: '#111' },
-  cardMeta: { color: '#6b7280', fontSize: 13, marginTop: 2 },
+  cardRow:     { flexDirection: 'row', alignItems: 'center' },
+  cardName:    { fontSize: 16, fontWeight: '600', color: '#111' },
+  cardMeta:    { color: '#6b7280', fontSize: 13, marginTop: 2 },
+  chevron:     { position: 'absolute', right: 16, top: '50%', color: '#d1d5db', fontSize: 20 },
 });
