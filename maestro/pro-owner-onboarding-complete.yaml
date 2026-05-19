@@ -1,0 +1,26 @@
+appId: com.universalbook.app
+---
+- launchApp
+- tapOn: 'Email'
+- inputText: 'freshowner@example.com'
+- tapOn: 'Password'
+- inputText: 'password'
+- tapOn: 'Sign in'
+# Arrives at SuccessStep (user is seeded as fresh PRO Owner with no org setup)
+- assertVisible: "You're a Pro Owner."
+- tapOn:
+    text: "Set up your first service →"
+# Step 1 — ServiceDetailsStep
+- assertVisible: 'What service do you offer?'
+- tapOn:
+    id: 'name-input'
+- inputText: 'Massage'
+- tapOn:
+    accessibilityLabel: 'Next'
+# Step 2 — OpenHoursStep
+- assertVisible: 'When are you open?'
+- tapOn:
+    accessibilityLabel: 'Finish setup'
+# Arrives on staff bookings tab
+- assertVisible: 'Bookings'
+- assertVisible: '2 of 4'
