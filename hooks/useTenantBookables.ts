@@ -48,8 +48,10 @@ export function useUpdateBookable(uuid: string) {
       const { data } = await api.patch(`/api/v1/bookables/${uuid}`, payload);
       return data.data ?? data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tenant-bookables'] });
+    onSuccess: (updated: TenantBookable) => {
+      queryClient.setQueryData<TenantBookable[]>(['tenant-bookables'], (old) =>
+        old?.map((b) => (b.id === updated.id ? updated : b)) ?? []
+      );
       queryClient.invalidateQueries({ queryKey: ['org-setup-status'] });
     },
   });

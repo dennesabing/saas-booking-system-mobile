@@ -3,6 +3,7 @@ import api from '../lib/api';
 
 export type ServiceDetails = {
   name: string;
+  description?: string;
   duration_minutes: number;
   price: number;
   currency?: string;

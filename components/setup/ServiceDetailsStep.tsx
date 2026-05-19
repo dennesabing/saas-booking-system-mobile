@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import {
-  KeyboardAvoidingView, Platform, Pressable, StyleSheet,
+  KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet,
   Switch, Text, TextInput, View,
 } from 'react-native';
 
 const DURATIONS = [15, 30, 45, 60, 90, 120];
 
 type Props = {
-  onNext: (data: { name: string; duration_minutes: number; price: number }) => void;
+  onNext: (data: { name: string; description: string; duration_minutes: number; price: number }) => void;
   onSkip: () => void;
 };
 
 export function ServiceDetailsStep({ onNext, onSkip }: Props) {
   const [name, setName]               = useState('');
+  const [description, setDescription] = useState('');
   const [duration, setDuration]       = useState(30);
   const [priceDisplay, setPriceDisplay] = useState('0.00');
   const [isFree, setIsFree]           = useState(false);
@@ -26,7 +27,7 @@ export function ServiceDetailsStep({ onNext, onSkip }: Props) {
 
   function handleNext() {
     if (!name.trim()) return;
-    onNext({ name: name.trim(), duration_minutes: duration, price: isFree ? 0 : priceCents });
+    onNext({ name: name.trim(), description: description.trim(), duration_minutes: duration, price: isFree ? 0 : priceCents });
   }
 
   return (
@@ -34,6 +35,7 @@ export function ServiceDetailsStep({ onNext, onSkip }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={styles.container}
     >
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
       <Pressable onPress={onSkip} style={styles.skipRow}>
         <Text style={styles.skipText}>Skip</Text>
       </Pressable>
@@ -47,6 +49,18 @@ export function ServiceDetailsStep({ onNext, onSkip }: Props) {
         placeholder="e.g. Haircut, Tennis Court, Massage"
         maxLength={100}
         returnKeyType="next"
+      />
+
+      <Text style={styles.label}>Description (optional)</Text>
+      <TextInput
+        testID="description-input"
+        style={[styles.input, styles.multiline]}
+        value={description}
+        onChangeText={setDescription}
+        placeholder="Brief description of your service…"
+        multiline
+        numberOfLines={3}
+        returnKeyType="done"
       />
 
       <Text style={styles.label}>Duration</Text>
@@ -86,6 +100,7 @@ export function ServiceDetailsStep({ onNext, onSkip }: Props) {
       >
         <Text style={styles.ctaText}>Next →</Text>
       </Pressable>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -96,6 +111,7 @@ const styles = StyleSheet.create({
   skipText:               { color: '#6b7280', fontSize: 14 },
   label:                  { fontSize: 14, fontWeight: '600', color: '#374151', marginTop: 20, marginBottom: 6 },
   input:                  { borderWidth: 1, borderColor: '#d1d5db', borderRadius: 10, padding: 12, fontSize: 15 },
+  multiline:              { minHeight: 72, textAlignVertical: 'top' },
   inputDisabled:          { backgroundColor: '#f3f4f6', color: '#9ca3af' },
   durationRow:            { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   durationChip:           { borderWidth: 1, borderColor: '#d1d5db', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 8 },
