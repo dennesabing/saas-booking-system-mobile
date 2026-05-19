@@ -9,3 +9,12 @@ if (typeof globalThis.structuredClone === 'undefined') {
   // Node 17+ has structuredClone natively; for older Node provide a simple clone.
   globalThis.structuredClone = (val) => JSON.parse(JSON.stringify(val));
 }
+
+jest.mock('react-native-iap', () => ({
+  initConnection: jest.fn(async () => true),
+  endConnection: jest.fn(async () => undefined),
+  getSubscriptions: jest.fn(async () => [{ productId: 'mock_sku', localizedPrice: '$399.99' }]),
+  requestSubscription: jest.fn(async () => ({ transactionReceipt: 'mock-receipt-blob', transactionId: 'tx_1' })),
+  getAvailablePurchases: jest.fn(async () => []),
+  finishTransaction: jest.fn(async () => undefined),
+}));

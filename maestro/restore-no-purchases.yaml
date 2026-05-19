@@ -1,0 +1,12 @@
+appId: com.universalbook.app
+---
+- launchApp
+- tapOn: 'Email'
+- inputText: 'free.user@example.com'
+- tapOn: 'Password'
+- inputText: 'password'
+- tapOn: 'Sign in'
+- tapOn: 'Profile'
+- tapOn: 'Restore purchases'
+- assertVisible: 'No purchases to restore.'
+- assertVisible: 'My Bookings'
