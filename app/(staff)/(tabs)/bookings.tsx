@@ -119,12 +119,7 @@ export default function StaffBookingsScreen() {
       data={bookings}
       keyExtractor={(b) => b.uuid}
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
-      ListHeaderComponent={
-        <>
-          <SetupChecklist />
-          <Text style={styles.heading}>Bookings</Text>
-        </>
-      }
+      ListHeaderComponent={<SetupChecklist />}
       ListEmptyComponent={
         hasBookable ? (
           <Text style={styles.empty}>No bookings.</Text>
@@ -176,7 +171,6 @@ export default function StaffBookingsScreen() {
 const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   list: { padding: 16 },
-  heading: { fontSize: 22, fontWeight: '700', marginBottom: 16, color: '#111' },
   empty: { color: '#9ca3af', textAlign: 'center', marginTop: 32 },
   card: {
     backgroundColor: '#fff',

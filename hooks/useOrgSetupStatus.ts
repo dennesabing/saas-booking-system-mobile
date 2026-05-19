@@ -19,6 +19,8 @@ export function useOrgSetupStatus() {
   return useQuery<OrgSetupStatus>({
     queryKey: ['org-setup-status'],
     queryFn: () => api.get('/api/v1/org/setup-status').then(r => r.data),
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
 }
 
