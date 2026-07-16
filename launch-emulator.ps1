@@ -1,6 +1,10 @@
 # launch-emulator.ps1
 # Always kills port 8085 and starts a fresh Expo dev server on that port.
 # exp:// address: exp://127.0.0.1:8085
+# From mobile/ directory:
+# npm run emulator
+# or directly:
+# powershell -ExecutionPolicy Bypass -File ./launch-emulator.ps
 
 param(
     [string]$Device = "emulator-5554"

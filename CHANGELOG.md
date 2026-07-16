@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **"+ Create Booking" button** added to `app/(staff)/bookables/[id].tsx` (between "Save changes" and "Delete service"), navigating to the create-booking screen.
 - **`DateSlotPicker` shared component** (`components/booking/DateSlotPicker.tsx`) — horizontal 30-day date pill row + 3-column time slot grid. Calls `useAvailability` and handles loading/error/empty states. Reused by both the marketplace detail screen and the PRO Owner create-booking screen.
 - **`useMarketplaceBookables` hook** (`hooks/useMarketplaceBookables.ts`) — `useInfiniteQuery` wrapper for `GET /api/v1/marketplace/bookables` with `MarketplaceBookable` and `MarketplaceParams` types.
+- **`launch-emulator.ps1`** — dev script that frees port 8085 and starts a fresh Expo dev server on it (`exp://127.0.0.1:8085`), for a consistent emulator setup. Runnable via `npm run emulator`.
 
 - **PRO Owner post-upgrade onboarding flow**: guides a newly-upgraded owner from the success screen to a booking-ready organization.
   - `SuccessStep` updated: primary CTA "Set up your first service →" navigates to setup modal; "Go to dashboard" demoted to secondary text link.
